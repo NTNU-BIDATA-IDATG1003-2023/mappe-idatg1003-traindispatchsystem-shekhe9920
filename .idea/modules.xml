@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/MappeVurdering.iml" filepath="$PROJECT_DIR$/.idea/MappeVurdering.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mappe-idatg1003-traindispatchsystem-shekhe9920-main/TrainDispatchSystem.iml" filepath="$PROJECT_DIR$/mappe-idatg1003-traindispatchsystem-shekhe9920-main/TrainDispatchSystem.iml" />
+    </modules>
+  </component>
+</project>
