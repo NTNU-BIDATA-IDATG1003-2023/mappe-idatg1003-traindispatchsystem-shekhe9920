@@ -16,14 +16,14 @@ public class EnhetsTester {
         TrainDispatchSystem trainDispatch0 = new TrainDispatchSystem("Gjøvik", "Oslo", LocalTime.of(8,
                 55),"F1", 4, 123);
         TrainDispatchSystem trainDispatch1 = new TrainDispatchSystem("Gjøvik", "Bergen", LocalTime.of(8,
-                55),"F1", 2, 123);
+                55),"F1", 2, 13);
 
         // Attempt to set the train number for both objects to 123.
         trainDispatchList.add(trainDispatch0);
         trainDispatchList.add(trainDispatch1);
 
-        trainDispatch0.setTrainNumber(123);
-        trainDispatch1.setTrainNumber(123);
+        //trainDispatch0.setTrainNumber(123);
+        //trainDispatch1.setTrainNumber(13);
 
         // Print the list of TrainDispatchSystem objects.
         System.out.println(trainDispatchList);
@@ -37,6 +37,10 @@ public class EnhetsTester {
             System.out.println(trainDispatchFromList.getLine());
             System.out.println(trainDispatchFromList.getTrainNumber());
         }
+
+        //sets a new departure time if the train is delayed.
+        trainDispatch1.setDelay(10);
+        System.out.println(trainDispatch1.getDepartureTime());
 
 
     }
