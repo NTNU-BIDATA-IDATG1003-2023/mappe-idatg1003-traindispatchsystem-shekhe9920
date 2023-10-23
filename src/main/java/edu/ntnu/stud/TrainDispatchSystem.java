@@ -1,7 +1,8 @@
 package edu.ntnu.stud;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import trainmanager.TrainManager;
+
 
 /**
  * The {@code TrainDispatchSystem} class represents a train dispatch system.
@@ -12,14 +13,14 @@ import java.time.LocalTime;
  *
  * <blockquote><pre>
  * TrainDispatchSystem trainDispatch =
- * new TrainDispatchSystem("Gjøvik", "Oslo", LocalTime.of(8, 55), "F1", 4, 123);
+ * new TrainDispatchSystem("Gjøvik", "Oslo", LocalTime.of(8, 55), "F1", 4);
  * </pre></blockquote>
  *
  * <p>The class {@code TrainDispatchSystem} includes methods for adding delays,
  * if a train is not on time.
  *
  * @author Karwan Shekhe
- * @version 0.0.3
+ * @version 0.0.4
  * @since 0.0.1
  */
 public class TrainDispatchSystem {
@@ -29,9 +30,7 @@ public class TrainDispatchSystem {
   private LocalTime departureTime;             // The time of departure.
   private String line;                         // The train line identifier.
   private int track;                           // The track number.
-  private boolean trainNumberSet = false;      // A flag to check if the train number has been set.
-  private int trainNumber;                     // The allocated train number.
-  private LocalTime trainNumberAllocationTime; // The time when the train number was allocated.
+  private String trainNumber;                     // The allocated train number.
 
   /**
    * Constructor to initialize a TrainDispatchSystem object.
@@ -192,22 +191,24 @@ public class TrainDispatchSystem {
     return track;
   }
 
+  private TrainManager trainManager = new TrainManager();
+
   /**
-   * Sets the train number for the train departure along with the allocation time.
-   * Throws a IllegalStateException if the train number is already been sett.
+   * Sets the train number for the train departure. If the provided train number is available,
+   * it assigns the train number to this train departure and marks it as allocated.
+   * If the train number is not available,
+   * it sets the train number to "TRAIN NUMBER IS NOT AVAILABLE."
    *
-   * @param trainNumber                 The train number to set.
-   * @param allocationTime  The time when the train number is allocated.
-   * @throws IllegalArgumentException   If the train number has already been set.
+   * @param trainNumber The train number to set.
    * @since 0.0.1
    */
-  public void setTrainNumber(int trainNumber, LocalDateTime allocationTime) {
-    if (!trainNumberSet) {
+  public void setTrainNumber(String trainNumber) {
+    // Check if the train number is already assigned to another instance
+    if (trainManager.isTrainNumberAvailable(trainNumber)) {
       this.trainNumber = trainNumber;
-      this.trainNumberAllocationTime = LocalTime.from(allocationTime);
-      trainNumberSet = true;
+      trainManager.markTrainNumberAsAllocated(trainNumber, this);
     } else {
-      throw new IllegalStateException("Train number has already been set.");
+      this.trainNumber = "TRAIN NUMBER IS NOT AVAILABLE";
     }
   }
 
@@ -217,17 +218,7 @@ public class TrainDispatchSystem {
    * @return The allocated train number.
    * @since 0.0.1
    */
-  public int getTrainNumber() {
+  public String getTrainNumber() {
     return trainNumber;
-  }
-
-  /**
-   * Gets the time when the train number was allocated.
-   *
-   * @return The allocation time.
-   * @since 0.0.3
-   */
-  public LocalTime getTrainNumberAllocationTime() {
-    return trainNumberAllocationTime;
   }
 }
