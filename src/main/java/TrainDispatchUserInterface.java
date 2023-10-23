@@ -1,15 +1,14 @@
 import edu.ntnu.stud.TrainDispatchSystem;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashSet;
-import trainmanager.TrainManager;
+
 
 /**
  * The {@code TrainDispatchUI} class is responsible for managing the user interface of
  * the Train Dispatch System.
  * It handles the initialization of train trips and the presentation of train dispatch
  * information in a tabular format.
- * This class inteface with the {@code TrainManager} and {@code TrainDispatchSystem} classes
+ * This class interface with the {@code TrainManager} and {@code TrainDispatchSystem} classes
  * to provide a comprehensive
  * user experience for managing and viewing train-related data.
  *
@@ -17,9 +16,9 @@ import trainmanager.TrainManager;
  *
  * <blockquote><pre>
  * 1. Initializing train trips by creating instance of {code TrainDispatchSystem}
- *    and manually allocating train numbers.
- * 2. Display train dispatch information in a tabular format, including departure stations,
- *    destinations, departure times, tracks, train lines and allocated train numbers
+ *     and manually allocating train numbers.
+ * 2. Display train dispatch information in a tabular format, including departure
+ *     stations, destinations, departure times, tracks, train lines and allocated train numbers
  * </pre></blockquote>
  *
  * <p>To utilize this class, you can create an instance of {@code TrainDispatchUI}, call the
@@ -27,22 +26,12 @@ import trainmanager.TrainManager;
  * user interface and present train dispatch information.
  *
  * @author Karwan Shekhe
- * @version 0.0.1
+ * @version 0.0.2
  * @since 0.0.1
  */
 public class TrainDispatchUserInterface {
-  private TrainManager trainManager;
   private HashSet<TrainDispatchSystem> trainDispatchList = new HashSet<>();
 
-  /**
-   * Constructor for initializing a {@code TrainDispatchUI} instance with {@code TrainManger}.
-   *
-   * @param trainManager The {@code TrainManager} instance for managing train number allocations.
-   * @since 0.0.1
-   */
-  public TrainDispatchUserInterface(TrainManager trainManager) {
-    this.trainManager = trainManager;
-  }
 
   /**
    * Initializes the train trips in the system.
@@ -52,7 +41,6 @@ public class TrainDispatchUserInterface {
    * @since 0.0.1
    */
   public void init() {
-    // Flytt initialiseringen av trainDispatchList til init-metoden
     // Create TrainDispatchSystem instances and allocate train numbers
     TrainDispatchSystem trainDispatch0 = new TrainDispatchSystem("Gjøvik", "Oslo",
         LocalTime.of(8, 55), "F1", 4);
@@ -61,8 +49,8 @@ public class TrainDispatchUserInterface {
     TrainDispatchSystem trainDispatch2 = new TrainDispatchSystem("Gjøvik", "Lillehammer",
         LocalTime.of(8, 55), "F1", 2);
     TrainDispatchSystem trainDispatch3 = new TrainDispatchSystem("Gjøvik", "Tromsø",
-        LocalTime.of(15, 00), "F2", 5);
-    TrainDispatchSystem trainDispatch4 = new TrainDispatchSystem("Gjøvik", "Gardemoen",
+        LocalTime.of(15, 0), "F2", 5);
+    TrainDispatchSystem trainDispatch4 = new TrainDispatchSystem("Gjøvik", "Gardermoen",
         LocalTime.of(13, 15), "F13", 2);
 
     // Create TrainDispatchSystem instances and allocate train numbers.
@@ -74,16 +62,17 @@ public class TrainDispatchUserInterface {
 
 
     // Manually set train numbers
-    int trainNumber0 = 123456;
-    trainDispatch0.setTrainNumber(trainNumber0, LocalDateTime.now());
-    int trainNumber1 = 641453;
-    trainDispatch1.setTrainNumber(trainNumber1, LocalDateTime.now());
-    int trainNumber2 = 765763;
-    trainDispatch2.setTrainNumber(trainNumber2, LocalDateTime.now());
-    int trainNumber3 = 808797;
-    trainDispatch3.setTrainNumber(trainNumber3, LocalDateTime.now());
-    int trainNumber4 = 946878;
-    trainDispatch4.setTrainNumber(trainNumber4, LocalDateTime.now());
+    String trainNumber0 = "123456";
+    trainDispatch0.setTrainNumber(trainNumber0);
+    String trainNumber1 = "641453";
+    trainDispatch1.setTrainNumber(trainNumber1);
+    String trainNumber2 = "765763";
+    trainDispatch2.setTrainNumber(trainNumber2);
+    String trainNumber3 = "808797";
+    trainDispatch3.setTrainNumber(trainNumber3);
+    String trainNumber4 = "946878";
+    trainDispatch4.setTrainNumber(trainNumber4);
+
   }
 
   /**
@@ -105,7 +94,7 @@ public class TrainDispatchUserInterface {
     // Display information about train trips in a tabular format
     for (TrainDispatchSystem trainDispatch : trainDispatchList) {
 
-      System.out.printf("| %-17s | %-11s | %-13s  | %-5d | %-4s | %-12d |%n",
+      System.out.printf("| %-17s | %-11s | %-13s  | %-5d | %-4s | %-12s |%n",
           trainDispatch.getDepartureStation(),
           trainDispatch.getDestination(),
           trainDispatch.getDepartureTime(),
