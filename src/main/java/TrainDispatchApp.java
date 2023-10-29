@@ -1,3 +1,5 @@
+import edu.ntnu.stud.TrainDispatchSystem;
+import java.util.HashSet;
 
 /**
  * The {@code TrainDispatchApp} class serves as the main entry point for the program,
@@ -21,7 +23,7 @@
  * run the {@code main} method.
  *
  * @author Karwan Shekhe
- * @version 0.0.2
+ * @version 0.0.3
  * @since 0.0.1
  */
 public class TrainDispatchApp {
@@ -34,15 +36,17 @@ public class TrainDispatchApp {
    * @param args Command-line arguments (not used in this application).
    */
   public static void main(String[] args) {
-    // Creates an instance of TrainDispatchUserInterface
-    TrainDispatchUserInterface trainDispatchUserInterface
-        = new TrainDispatchUserInterface();
+    // Initialize the TrainDispatchInitializer
+    TrainDispatchInitializer initializer = new TrainDispatchInitializer();
+    initializer.init();
 
-    // Initialize and add train trips to the system.
-    trainDispatchUserInterface.init();
+    // Get the train dispatch list from the initializer
+    HashSet<TrainDispatchSystem> trainDispatchList = initializer.getTrainDispatchList();
 
-    // Start the user interface and display train trip information.
-    trainDispatchUserInterface.start();
+    // Create an instance of TrainDispatchUserInterface and pass the list
+    TrainDispatchUserInterface ui = new TrainDispatchUserInterface(trainDispatchList);
+
+    // Call the start method
+    ui.start();
   }
-  //Commit Test
 }

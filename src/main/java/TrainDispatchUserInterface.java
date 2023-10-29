@@ -1,79 +1,45 @@
 import edu.ntnu.stud.TrainDispatchSystem;
-import java.time.LocalTime;
 import java.util.HashSet;
 
 
+
 /**
- * The {@code TrainDispatchUI} class is responsible for managing the user interface of
- * the Train Dispatch System.
- * It handles the initialization of train trips and the presentation of train dispatch
- * information in a tabular format.
- * This class interface with the {@code TrainManager} and {@code TrainDispatchSystem} classes
- * to provide a comprehensive
- * user experience for managing and viewing train-related data.
+ * The {@code TrainDispatchUserInterface} class manages the user interface of the
+ * Train Dispatch System.
+ * It is responsible for presenting train dispatch information.
+ * This class collaborates with the {@code TrainManager} and {@code TrainDispatchSystem}
+ * classes to provide a comprehensive user experience for handling and viewing train-related data.
  *
  * <p>The primary functionalities of this class include:
  *
  * <blockquote><pre>
- * 1. Initializing train trips by creating instance of {code TrainDispatchSystem}
- *     and manually allocating train numbers.
- * 2. Display train dispatch information in a tabular format, including departure
- *     stations, destinations, departure times, tracks, train lines and allocated train numbers
+ *   Display train dispatch information in a tabular format, including departure
+ *   stations, destinations, departure times, tracks, train lines and allocated
+ *   train numbers
  * </pre></blockquote>
  *
- * <p>To utilize this class, you can create an instance of {@code TrainDispatchUI}, call the
- * {@code init} method to set up initial train trips, and call the {@code start} method to lunch the
- * user interface and present train dispatch information.
+ * <p>To utilize this class, you can create an instance of {@code TrainDispatchUserInterface} and
+ * call the start method to present train dispatch information.
+ * Ensure that train trips are initialized using the {@code TrainDispatchInitializer} class before
+ * using this user interface
  *
  * @author Karwan Shekhe
- * @version 0.0.2
+ * @version 0.0.3
  * @since 0.0.1
  */
 public class TrainDispatchUserInterface {
-  private HashSet<TrainDispatchSystem> trainDispatchList = new HashSet<>();
-
+  private HashSet<TrainDispatchSystem> trainDispatchList;
 
   /**
-   * Initializes the train trips in the system.
-   * Creates instances of {@code TrainDispatchSystem} and manually allocates train numbers.
-   * This method prepares the initial dataset of train dispatch information for the display.
+   * Initializes the TrainDispatchUserInterface with a collection of train dispatch systems.
    *
-   * @since 0.0.1
+   * @param trainDispatchList A HashSet of TrainDispatchSystem instances representing train trips.
+   * @since 0.0.3
    */
-  public void init() {
-    // Create TrainDispatchSystem instances and allocate train numbers
-    TrainDispatchSystem trainDispatch0 = new TrainDispatchSystem("Gjøvik", "Oslo",
-        LocalTime.of(8, 55), "F1", 4);
-    TrainDispatchSystem trainDispatch1 = new TrainDispatchSystem("Gjøvik", "Bergen",
-        LocalTime.of(8, 55), "F1", 2);
-    TrainDispatchSystem trainDispatch2 = new TrainDispatchSystem("Gjøvik", "Lillehammer",
-        LocalTime.of(8, 55), "F1", 2);
-    TrainDispatchSystem trainDispatch3 = new TrainDispatchSystem("Gjøvik", "Tromsø",
-        LocalTime.of(15, 0), "F2", 5);
-    TrainDispatchSystem trainDispatch4 = new TrainDispatchSystem("Gjøvik", "Gardermoen",
-        LocalTime.of(13, 15), "F13", 2);
-
-    // Create TrainDispatchSystem instances and allocate train numbers.
-    trainDispatchList.add(trainDispatch0);
-    trainDispatchList.add(trainDispatch1);
-    trainDispatchList.add(trainDispatch2);
-    trainDispatchList.add(trainDispatch3);
-    trainDispatchList.add(trainDispatch4);
-
-
-    // Manually set train numbers
-    String trainNumber0 = "123456";
-    trainDispatch0.setTrainNumber(trainNumber0);
-    String trainNumber1 = "641453";
-    trainDispatch1.setTrainNumber(trainNumber1);
-    String trainNumber2 = "765763";
-    trainDispatch2.setTrainNumber(trainNumber2);
-    String trainNumber3 = "808797";
-    trainDispatch3.setTrainNumber(trainNumber3);
-    String trainNumber4 = "946878";
-    trainDispatch4.setTrainNumber(trainNumber4);
-
+  public TrainDispatchUserInterface(HashSet<TrainDispatchSystem> trainDispatchList) {
+    this.trainDispatchList = trainDispatchList;
   }
+
 
   /**
    * Starts the user interface for displaying train dispatch information in a tabular format.
@@ -106,6 +72,7 @@ public class TrainDispatchUserInterface {
     // Display the table footer
     System.out.println("------------------------------------------"
         + "----------------------------------------");
+
+
   }
-  //Commit Test
 }
