@@ -26,7 +26,7 @@ import java.util.HashSet;
  * @version 0.0.3
  * @since 0.0.1
  */
-public class TrainDispatchApp {
+public class Main {
 
   /**
    * The main entry point of the Train Dispatch System Application.

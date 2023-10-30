@@ -1,5 +1,6 @@
 import edu.ntnu.stud.TrainDispatchSystem;
 import java.util.HashSet;
+import java.util.Scanner;
 
 
 
@@ -24,7 +25,7 @@ import java.util.HashSet;
  * using this user interface
  *
  * @author Karwan Shekhe
- * @version 0.0.3
+ * @version 0.0.3 (NEW VERSION 0.0.4)
  * @since 0.0.1
  */
 public class TrainDispatchUserInterface {
@@ -49,6 +50,7 @@ public class TrainDispatchUserInterface {
    * @since 0.0.1
    */
   public void start() {
+
     // Display the table header
     System.out.println("----------------------------------------"
         + "------------------------------------------");
@@ -75,4 +77,39 @@ public class TrainDispatchUserInterface {
 
 
   }
+
+  /**
+   * Displays a welcome message to the user.
+   *
+   * @since 0.0.4
+   */
+  public void displayWelcomeText() {
+    System.out.println("================================================");
+    System.out.println("Welcome to the Train Dispatch System Application");
+    System.out.println("================================================");
+  }
+
+  /**
+   * Displays the main menu, ang get the user's choice.
+   *
+   * @since 0.0.4
+   */
+  public int displayMenu() {
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("\n\nMain Menu");
+    System.out.println("================================================");
+    System.out.println("Please select an option from the menu below:");
+    System.out.println("1. View train dispatch information");
+    System.out.println("2. Add a new train trip");
+    System.out.println("3. Remove a train trip");
+    System.out.println("4. Exit the application");
+    System.out.println("5. Add delay to a train");
+    System.out.println("6. Exit the application");
+    System.out.println("Pleas select an option: ");
+    System.out.println("================================================");
+    int option = scanner.nextInt();
+    return option;
+  }
+
+
 }
