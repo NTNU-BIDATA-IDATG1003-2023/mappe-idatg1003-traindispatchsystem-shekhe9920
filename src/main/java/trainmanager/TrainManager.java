@@ -104,6 +104,5 @@ public class TrainManager {
   public TrainDispatchSystem findTrainDeparture(String trainNumber) {
     return allocatedTrainNumbers.get(trainNumber);
   }
-  // commit test
 
 }

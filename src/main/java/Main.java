@@ -49,6 +49,4 @@ public class Main {
     // Call the start method
     ui.start();
   }
-  // commit test
-
 }
