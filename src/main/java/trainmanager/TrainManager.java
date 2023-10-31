@@ -37,6 +37,7 @@ public class TrainManager {
   // A map to keep track of all allocated train numbers and their associations
   private Map<String, TrainDispatchSystem> allocatedTrainNumbers = new HashMap<>();
 
+
   /**
    * Checks the availability of a train number.
    *
@@ -48,7 +49,7 @@ public class TrainManager {
     return !allocatedTrainNumbers.containsKey(trainNumber);
   }
 
-  /**
+  /** (CHANGE THIS METHOD WITH allocateTrainNumbers)
    * Marks a train number as allocated and associates it with a specific train departure.
    * This method is responsible for marking a train number as allocated to a particular
    * train departure. If the train number is already in use,

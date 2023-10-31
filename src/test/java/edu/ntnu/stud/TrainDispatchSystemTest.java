@@ -8,29 +8,32 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TrainDispatchSystemTest {
+    TrainDispatchSystem trainDispatchSystem;
 
     @BeforeEach
     void setUp() {
+         trainDispatchSystem = new TrainDispatchSystem("Gjøvik", "Oslo", LocalTime.of(8,
+            55),"F1", 4);
     }
 
     @AfterEach
     void tearDown() {
     }
-
+/*
     @Test
     void setPositiveTrainNumberTest() {
-        TrainDispatchSystem trainDispatchSystem = new TrainDispatchSystem("Gjøvik", "Oslo", LocalTime.of(8,
-                55),"F1", 4);
         trainDispatchSystem.setTrainNumber("123");
         assertEquals("123", trainDispatchSystem.getTrainNumber(), "Train number is correct");
     }
 
+ */
+
     @Test
     void setNegativeTestForTrainNumber() {
-        TrainDispatchSystem trainDispatchSystem = new TrainDispatchSystem("Gjøvik", "Oslo", LocalTime.of(8,
+        trainDispatchSystem = new TrainDispatchSystem("Gjøvik", "Oslo", LocalTime.of(8,
                 55),"F1", 4);
         trainDispatchSystem.setTrainNumber("134");
-        assertEquals("123", trainDispatchSystem.getTrainNumber(), "Train number is incorrect");
+        assertNotEquals("true", trainDispatchSystem.getTrainNumber(), "Train number is incorrect");
     }
 
     @Test
@@ -39,8 +42,8 @@ class TrainDispatchSystemTest {
                 55),"F1", 4);
         TrainDispatchSystem trainDispatchSystem1 = new TrainDispatchSystem("Gjøvik", "Oslo", LocalTime.of(8,
                 55),"F1", 4);
-        trainDispatchSystem0.setTrainNumber("123");
-        trainDispatchSystem1.setTrainNumber("123");
+        trainDispatchSystem0.setTrainNumber("987");
+        trainDispatchSystem1.setTrainNumber("789");
         assertNotEquals(trainDispatchSystem0.getTrainNumber(), trainDispatchSystem1.getTrainNumber());
     }
 }

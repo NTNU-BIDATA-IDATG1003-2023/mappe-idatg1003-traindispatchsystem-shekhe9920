@@ -206,10 +206,6 @@ public class TrainDispatchSystem {
    * @since 0.0.1
    */
   public void setTrainNumber(String trainNumber) {
-    // Check if the train number is already assigned to this instance
-    if (trainNumber.equals(this.trainNumber)) {
-      return; // The same train number is already set for this instance, do nothing.
-    }
     // Check if the train number is already assigned to another instance
     if (!trainManager.isTrainNumberAvailable(trainNumber)) {
       throw new IllegalStateException("Train number " + trainNumber + " is already allocated");
