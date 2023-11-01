@@ -1,9 +1,10 @@
 package trainmanager;
 
 import edu.ntnu.stud.TrainDispatchSystem;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.concurrent.TransferQueue;
 
 
 /**
@@ -105,4 +106,17 @@ public class TrainManager {
     return allocatedTrainNumbers.get(trainNumber);
   }
 
+  /** (NEW METHOD)
+   *
+   *
+   * @since 0.0.4
+   */
+  public TrainDispatchSystem findTrainDeparture(LocalTime departureTime) {
+    for (TrainDispatchSystem trainDispatch: allocatedTrainNumbers.values()) {
+      if (trainDispatch.getDepartureTime().equals(departureTime)) {
+        return trainDispatch;
+      }
+    }
+    return null; // No matching train departure found
+  }
 }
