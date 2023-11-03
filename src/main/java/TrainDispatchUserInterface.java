@@ -1,4 +1,6 @@
 import edu.ntnu.stud.TrainDispatchSystem;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.HashSet;
@@ -33,7 +35,7 @@ import trainmanager.TrainManager;
  * using this user interface
  *
  * @author Karwan Shekhe
- * @version 0.0.5
+ * @version 0.0.6
  * @since 0.0.1
  */
 public class TrainDispatchUserInterface {
@@ -78,7 +80,10 @@ public class TrainDispatchUserInterface {
    */
   public void displayCurrentTime() {
     LocalTime currentTime = LocalTime.now();
-    System.out.println("| Gjøvik Station |" + currentTime + " |");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+    String formattedTime = currentTime.format(formatter);
+    LocalDate currentDate = LocalDate.now();
+    System.out.println("| Gjøvik Station | " + formattedTime + " | " + currentDate + "|");
   }
 
   /**
@@ -282,14 +287,8 @@ public class TrainDispatchUserInterface {
   public void assignTrackToTrainDeparture() {
     System.out.println("Please enter the train number: ");
     String trainNumber = scanner.nextLine();
-
-    TrainDispatchSystem trainDispatch = null;
-    for (TrainDispatchSystem trainDispatchSystem : trainDispatchList) {
-      if (trainDispatchSystem.getTrainNumber().equals(trainNumber)) {
-        trainDispatch = trainDispatchSystem;
-        break; // Stop searching once a match is found
-      }
-    }
+    TrainDispatchSystem trainDispatch =
+        searchTrainDispatchByAttribute("TrainNumber", trainNumber);
 
     if (trainDispatch == null) {
       System.out.println("Train with the specified train number was not found.");
@@ -317,13 +316,8 @@ public class TrainDispatchUserInterface {
     System.out.println("Please enter the train number: ");
     String trainNumber = scanner.nextLine();
 
-    TrainDispatchSystem trainDispatch = null;
-    for (TrainDispatchSystem trainDispatchSystem : trainDispatchList) {
-      if (trainDispatchSystem.getTrainNumber().equals(trainNumber)) {
-        trainDispatch = trainDispatchSystem;
-        break; // Stop searching once a match is found
-      }
-    }
+    TrainDispatchSystem trainDispatch =
+        searchTrainDispatchByAttribute("TrainNumber", trainNumber);
 
     if (trainDispatch == null) {
       System.out.println("Train with the specified train number was not found.");
@@ -353,14 +347,8 @@ public class TrainDispatchUserInterface {
   public void searchTrainDepartureByTrainNumber() {
     System.out.println("Please enter the train number: ");
     String trainNumber = scanner.nextLine();
-    TrainDispatchSystem trainDispatch = null;
-
-    for (TrainDispatchSystem trainDispatchSystem : trainDispatchList) {
-      if (trainDispatchSystem.getTrainNumber().equals(trainNumber)) {
-        trainDispatch = trainDispatchSystem;
-        break; // Stop searching once a match is found
-      }
-    }
+    TrainDispatchSystem trainDispatch =
+        searchTrainDispatchByAttribute("TrainNumber", trainNumber);
 
     if (trainDispatch != null) {
       displayTrainDepartureDetails(trainDispatch);
@@ -378,14 +366,8 @@ public class TrainDispatchUserInterface {
   public void searchTrainDepartureByDestination() {
     System.out.println("Please enter the destination: ");
     String destination = scanner.nextLine();
-
-    TrainDispatchSystem trainDispatch = null;
-    for (TrainDispatchSystem trainDispatchSystem : trainDispatchList) {
-      if (trainDispatchSystem.getDestination().equals(destination)) {
-        trainDispatch = trainDispatchSystem;
-        break; // Stop searching once a match is found
-      }
-    }
+    TrainDispatchSystem trainDispatch =
+        searchTrainDispatchByAttribute("Destination", destination);
 
     if (trainDispatch != null) {
       displayTrainDepartureDetails(trainDispatch);
@@ -412,13 +394,9 @@ public class TrainDispatchUserInterface {
       return;
     }
 
-    TrainDispatchSystem trainDispatch = null;
-    for (TrainDispatchSystem trainDispatchSystem : trainDispatchList) {
-      if (trainDispatchSystem.getDepartureTime().equals(departureTime)) {
-        trainDispatch = trainDispatchSystem;
-        break; // Stop searching once a match is found
-      }
-    }
+    String departureTimeString = departureTime.toString();
+    TrainDispatchSystem trainDispatch =
+        searchTrainDispatchByAttribute("DepartureTime", departureTimeString);
 
     if (trainDispatch != null) {
       displayTrainDepartureDetails(trainDispatch);
@@ -437,14 +415,8 @@ public class TrainDispatchUserInterface {
     System.out.println("Please enter the train number "
         + "for which you want to update the station time: ");
     String trainNumber = scanner.nextLine();
-
-    TrainDispatchSystem trainDispatch = null;
-    for (TrainDispatchSystem trainDispatchSystem : trainDispatchList) {
-      if (trainDispatchSystem.getTrainNumber().equals(trainNumber)) {
-        trainDispatch = trainDispatchSystem;
-        break; // Stop searching once a match is found
-      }
-    }
+    TrainDispatchSystem trainDispatch =
+        searchTrainDispatchByAttribute("TrainNumber", trainNumber);
 
     if (trainDispatch == null) {
       System.out.println("Train with the specified train number was not found.");
@@ -463,6 +435,40 @@ public class TrainDispatchUserInterface {
 
     trainDispatch.setDepartureTime(newStationTime);
     System.out.println("Station time updated successfully.");
+  }
+
+  /**
+   * Searches for a specific train dispatch record within a list of train dispatch system based on
+   * a given attribute, and it's corresponding value.
+   * This method iterates through a list of train dispatch systems and compares the provided
+   * attribute and value with each train dispatch record.
+   * It returns the first matching record found.
+   *
+   * @param attribute The attribute to search for. It can be one of the following: "TrainNumber",
+   *                  "Destination", or "DepartureTime".
+   * @param value The value to match against the specified attribute.
+   * @return The matching train dispatch system or null if not found.
+   * @since 0.0.6
+   */
+  public TrainDispatchSystem searchTrainDispatchByAttribute(String attribute, String value) {
+    TrainDispatchSystem trainDispatch = null;
+
+    for (TrainDispatchSystem trainDispatchSystem : trainDispatchList) {
+      if (attribute.equalsIgnoreCase("TrainNumber")
+          && trainDispatchSystem.getTrainNumber().equals(value)) {
+        trainDispatch = trainDispatchSystem;
+        break;
+      } else if (attribute.equalsIgnoreCase("Destination") &&
+          trainDispatchSystem.getDestination().equals(value)) {
+        trainDispatch = trainDispatchSystem;
+        break;
+      } else if (attribute.equalsIgnoreCase("DepartureTime") &&
+          trainDispatchSystem.getDepartureTime().equals(value)) {
+        trainDispatch = trainDispatchSystem;
+        break;
+      }
+    }
+    return trainDispatch;
   }
 
 }
