@@ -33,7 +33,7 @@ import trainmanager.TrainManager;
  * using this user interface
  *
  * @author Karwan Shekhe
- * @version 0.0.4
+ * @version 0.0.5
  * @since 0.0.1
  */
 public class TrainDispatchUserInterface {
@@ -126,56 +126,76 @@ public class TrainDispatchUserInterface {
   }
 
   /**
+   * Displays train departure details for a specific train departure.
+   *
+   * @param trainDispatch The train departure to display details for.
+   * @since 0.0.5
+   */
+  public void displayTrainDepartureDetails(TrainDispatchSystem trainDispatch) {
+    System.out.println("Train departure details for train "
+        + trainDispatch.getTrainNumber() +  " :");
+    System.out.println("Departure station: " + trainDispatch.getDepartureStation());
+    System.out.println("Departure Time: " + trainDispatch.getDepartureTime());
+    System.out.println("Track: " + trainDispatch.getTrack());
+    System.out.println("Line: " + trainDispatch.getLine());
+  }
+
+  /**
    * Processes the user's choice.
    *
    * @param choice The user's choice (1-9).
-   *               The choice must be an integer between 1 and 8.
-   *               If the choice is not valid, the user is prompted to select a valid option.
-   *               The user is prompted to select a valid option.
-   *
    * @since 0.0.4
    */
   public void processUserChoice(int choice) {
-    switch (choice) {
-      case 1:
-        // View train dispatch information
-        displayTrainDepartureInformation();
-        break;
-      case 2:
-        // Add a new train departure
-        addNewTrainDeparture();
-        break;
-      case 3:
-        // Assign a track to a train departure
-        assignTrackToTrainDeparture();
-        break;
-      case 4:
-        // Add a delay to a train departure
-        addDelayToTrainDeparture();
-        break;
-      case 5:
-        // Search for a train departure based on train number
-        searchTrainDepartureByTrainNumber();
-        break;
-      case 6:
-        // Search for a train departure based on destination
-        searchTrainDepartureByDestination();
-        break;
-      case 7:
-        // Search for a train departure based on departure time
-        searchTrainDepartureByDepartureTime();
-        break;
-      case 8:
-        // Update station time from user input
-        updateStationTimeFromUserInput();
-        break;
-      case 9:
-        // Exit the application
-        System.out.println("Exiting the application. Goodbye!");
-        break;
-      default:
+    while (choice != 9) {
+      switch (choice) {
+        case 1:
+          // View train dispatch information
+          displayTrainDepartureInformation();
+          break;
+        case 2:
+          // Add a new train departure
+          addNewTrainDeparture();
+          break;
+        case 3:
+          // Assign a track to a train departure
+          assignTrackToTrainDeparture();
+          break;
+        case 4:
+          // Add a delay to a train departure
+          addDelayToTrainDeparture();
+          break;
+        case 5:
+          // Search for a train departure based on train number
+          searchTrainDepartureByTrainNumber();
+          break;
+        case 6:
+          // Search for a train departure based on destination
+          searchTrainDepartureByDestination();
+          break;
+        case 7:
+          // Search for a train departure based on departure time
+          searchTrainDepartureByDepartureTime();
+          break;
+        case 8:
+          // Update station time from user input
+          updateStationTimeFromUserInput();
+          break;
+        case 9:
+          // Exit the application
+          System.out.println("Exiting the application. Goodbye!");
+          return;
+        default:
+          System.out.println("Invalid choice. Please select a valid option.");
+          break;
+      }
+
+      System.out.println("Do you want to go back to the main menu (press 0), or to exit the application (press 9)?");
+      try {
+        choice = Integer.parseInt(scanner.nextLine());
+      } catch (NumberFormatException e) {
         System.out.println("Invalid choice. Please select a valid option.");
-        break;
+      }
     }
   }
 
@@ -262,7 +282,14 @@ public class TrainDispatchUserInterface {
   public void assignTrackToTrainDeparture() {
     System.out.println("Please enter the train number: ");
     String trainNumber = scanner.nextLine();
-    TrainDispatchSystem trainDispatch = trainManager.findTrainDeparture(trainNumber);
+
+    TrainDispatchSystem trainDispatch = null;
+    for (TrainDispatchSystem trainDispatchSystem : trainDispatchList) {
+      if (trainDispatchSystem.getTrainNumber().equals(trainNumber)) {
+        trainDispatch = trainDispatchSystem;
+        break; // Stop searching once a match is found
+      }
+    }
 
     if (trainDispatch == null) {
       System.out.println("Train with the specified train number was not found.");
@@ -289,7 +316,14 @@ public class TrainDispatchUserInterface {
   public void addDelayToTrainDeparture() {
     System.out.println("Please enter the train number: ");
     String trainNumber = scanner.nextLine();
-    TrainDispatchSystem trainDispatch = trainManager.findTrainDeparture(trainNumber);
+
+    TrainDispatchSystem trainDispatch = null;
+    for (TrainDispatchSystem trainDispatchSystem : trainDispatchList) {
+      if (trainDispatchSystem.getTrainNumber().equals(trainNumber)) {
+        trainDispatch = trainDispatchSystem;
+        break; // Stop searching once a match is found
+      }
+    }
 
     if (trainDispatch == null) {
       System.out.println("Train with the specified train number was not found.");
@@ -305,6 +339,7 @@ public class TrainDispatchUserInterface {
       return;
     }
 
+    trainManager.allocateTrainNumbers(trainNumber, trainDispatch);
     trainDispatch.setDelay(delay);
     System.out.println("Delay added successfully.");
   }
@@ -318,10 +353,17 @@ public class TrainDispatchUserInterface {
   public void searchTrainDepartureByTrainNumber() {
     System.out.println("Please enter the train number: ");
     String trainNumber = scanner.nextLine();
-    TrainDispatchSystem trainDispatch = trainManager.findTrainDeparture(trainNumber);
+    TrainDispatchSystem trainDispatch = null;
+
+    for (TrainDispatchSystem trainDispatchSystem : trainDispatchList) {
+      if (trainDispatchSystem.getTrainNumber().equals(trainNumber)) {
+        trainDispatch = trainDispatchSystem;
+        break; // Stop searching once a match is found
+      }
+    }
 
     if (trainDispatch != null) {
-      System.out.println("Train departure found: " + trainDispatch);
+      displayTrainDepartureDetails(trainDispatch);
     } else {
       System.out.println("Train departure not found.");
     }
@@ -337,9 +379,16 @@ public class TrainDispatchUserInterface {
     System.out.println("Please enter the destination: ");
     String destination = scanner.nextLine();
 
-    TrainDispatchSystem trainDispatch = trainManager.findTrainDeparture(destination);
+    TrainDispatchSystem trainDispatch = null;
+    for (TrainDispatchSystem trainDispatchSystem : trainDispatchList) {
+      if (trainDispatchSystem.getDestination().equals(destination)) {
+        trainDispatch = trainDispatchSystem;
+        break; // Stop searching once a match is found
+      }
+    }
+
     if (trainDispatch != null) {
-      System.out.println("Train departure found: " + trainDispatch);
+      displayTrainDepartureDetails(trainDispatch);
     } else {
       System.out.println("Train departure not found");
     }
@@ -363,9 +412,16 @@ public class TrainDispatchUserInterface {
       return;
     }
 
-    TrainDispatchSystem trainDispatch = trainManager.findTrainDeparture(departureTime);
+    TrainDispatchSystem trainDispatch = null;
+    for (TrainDispatchSystem trainDispatchSystem : trainDispatchList) {
+      if (trainDispatchSystem.getDepartureTime().equals(departureTime)) {
+        trainDispatch = trainDispatchSystem;
+        break; // Stop searching once a match is found
+      }
+    }
+
     if (trainDispatch != null) {
-      System.out.println("Train departure found: " + trainDispatch);
+      displayTrainDepartureDetails(trainDispatch);
     } else {
       System.out.println("Train departure not found");
     }
@@ -381,7 +437,14 @@ public class TrainDispatchUserInterface {
     System.out.println("Please enter the train number "
         + "for which you want to update the station time: ");
     String trainNumber = scanner.nextLine();
-    TrainDispatchSystem trainDispatch = trainManager.findTrainDeparture(trainNumber);
+
+    TrainDispatchSystem trainDispatch = null;
+    for (TrainDispatchSystem trainDispatchSystem : trainDispatchList) {
+      if (trainDispatchSystem.getTrainNumber().equals(trainNumber)) {
+        trainDispatch = trainDispatchSystem;
+        break; // Stop searching once a match is found
+      }
+    }
 
     if (trainDispatch == null) {
       System.out.println("Train with the specified train number was not found.");
@@ -401,4 +464,5 @@ public class TrainDispatchUserInterface {
     trainDispatch.setDepartureTime(newStationTime);
     System.out.println("Station time updated successfully.");
   }
+
 }

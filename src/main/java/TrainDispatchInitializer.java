@@ -19,12 +19,12 @@ import trainmanager.TrainManager;
  * </pre></blockquote>
  *
  * @author Karwan Shekhe
- * @version 0.0.1
+ * @version 0.0.2
  * @since 0.0.1
  */
 public class TrainDispatchInitializer {
 
-  private HashSet<TrainDispatchSystem> trainDispatchList = new HashSet<>();
+  private static HashSet<TrainDispatchSystem> trainDispatchList = new HashSet<>();
   private TrainManager trainManager = new TrainManager();
 
   /**
@@ -81,8 +81,12 @@ public class TrainDispatchInitializer {
     //String trainNumber4 = "9458745";
     trainDispatch4.setTrainNumber("105");
 
-    //trainManager.markTrainNumberAsAllocated(trainDispatch0.getTrainNumber(), trainDispatch0);
-    //trainManager.markTrainNumberAsAllocated("123456", trainDispatch0);
+    trainManager.markTrainNumberAsAllocated("101", trainDispatch0);
+    trainManager.markTrainNumberAsAllocated("102", trainDispatch1);
+    trainManager.markTrainNumberAsAllocated("103", trainDispatch2);
+    trainManager.markTrainNumberAsAllocated("104", trainDispatch3);
+    trainManager.markTrainNumberAsAllocated("105", trainDispatch4);
+
   }
 
   /**

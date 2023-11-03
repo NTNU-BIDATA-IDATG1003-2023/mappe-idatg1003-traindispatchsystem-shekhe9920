@@ -31,7 +31,7 @@ public class TrainDispatchSystem {
   private String line;                         // The train line identifier.
   private int track;                           // The track number.
   private String trainNumber;                  // The allocated train number.
-  private static TrainManager trainManager = new TrainManager();
+  private static final TrainManager trainManager = new TrainManager();
 
   /**
    * Constructor to initialize a {@code TrainDispatchSystem} object.

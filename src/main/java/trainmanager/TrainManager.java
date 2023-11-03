@@ -1,10 +1,8 @@
 package trainmanager;
 
 import edu.ntnu.stud.TrainDispatchSystem;
-import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TransferQueue;
 
 
 /**
@@ -31,7 +29,7 @@ import java.util.concurrent.TransferQueue;
  * ensuring each train number is unique within the system.
  *
  * @author Karwan Shekhe
- * @version 0.0.3
+ * @version 0.0.4
  * @since 0.0.1
  */
 public class TrainManager {
@@ -93,30 +91,4 @@ public class TrainManager {
     }
   }
 
-  /** (NEW METHOD)
-   * Searches for a train number departure based on the given train number and returns
-   * it if found.
-   * Returns null if no matching train departure is found.
-   *
-   * @param trainNumber The train number to search for.
-   * @return The matching train departure or null if not found.
-   * @since 0.0.3
-   */
-  public TrainDispatchSystem findTrainDeparture(String trainNumber) {
-    return allocatedTrainNumbers.get(trainNumber);
-  }
-
-  /** (NEW METHOD)
-   *
-   *
-   * @since 0.0.4
-   */
-  public TrainDispatchSystem findTrainDeparture(LocalTime departureTime) {
-    for (TrainDispatchSystem trainDispatch: allocatedTrainNumbers.values()) {
-      if (trainDispatch.getDepartureTime().equals(departureTime)) {
-        return trainDispatch;
-      }
-    }
-    return null; // No matching train departure found
-  }
 }
