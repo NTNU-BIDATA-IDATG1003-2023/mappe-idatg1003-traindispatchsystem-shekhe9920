@@ -1,11 +1,10 @@
 import edu.ntnu.stud.TrainDispatchSystem;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.HashSet;
 import java.util.Scanner;
 import trainmanager.TrainManager;
+import guiutility.FeedBackMessages;
 
 
 /**
@@ -35,13 +34,15 @@ import trainmanager.TrainManager;
  * using this user interface
  *
  * @author Karwan Shekhe
- * @version 0.0.6
- * @since 0.0.1
+ * @version 0.0.7 (Version of this class.)
+ * @since 0.0.3 (This class was introduced in Version 0.0.3 of the Train Dispatch System application)
  */
 public class TrainDispatchUserInterface {
+  final FeedBackMessages feedBackMessages;
   private HashSet<TrainDispatchSystem> trainDispatchList;
   private TrainManager trainManager;
-  private Scanner scanner;
+  private final Scanner scanner;
+
 
   /**
    * Initializes the TrainDispatchUserInterface with a collection of train dispatch systems.
@@ -51,10 +52,10 @@ public class TrainDispatchUserInterface {
    */
   public TrainDispatchUserInterface(HashSet<TrainDispatchSystem> trainDispatchList) {
     this.trainDispatchList = trainDispatchList;
-    this.trainManager = new TrainManager(); // Create an instance of TrainManager
-    this.scanner = new Scanner(System.in); // Create an instance of Scanner
+    this.trainManager = new TrainManager();
+    this.scanner = new Scanner(System.in);
+    feedBackMessages = new FeedBackMessages(this.trainDispatchList);
   }
-
 
   /**
    * Starts the user interface.
@@ -62,9 +63,8 @@ public class TrainDispatchUserInterface {
    * @since 0.0.1
    */
   public void start() {
-    displayCurrentTime();
-    displayWelcomeText();
-
+    feedBackMessages.displayCurrentTime();
+    feedBackMessages.displayWelcomeText();
     int choice;
     do {
       choice = displayMenu();
@@ -73,29 +73,6 @@ public class TrainDispatchUserInterface {
     scanner.close();
   }
 
-  /**
-   * Displays the current time.
-   *
-   * @since 0.0.4
-   */
-  public void displayCurrentTime() {
-    LocalTime currentTime = LocalTime.now();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-    String formattedTime = currentTime.format(formatter);
-    LocalDate currentDate = LocalDate.now();
-    System.out.println("| Gjøvik Station | " + formattedTime + " | " + currentDate + "|");
-  }
-
-  /**
-   * Displays a welcome message to the user.
-   *
-   * @since 0.0.4
-   */
-  public void displayWelcomeText() {
-    System.out.println("================================================");
-    System.out.println("Welcome to the Train Dispatch System Application");
-    System.out.println("================================================");
-  }
 
   /**
    * Displays the main menu, ang get the user's choice.
@@ -105,45 +82,19 @@ public class TrainDispatchUserInterface {
    */
   public int displayMenu() {
     Scanner scanner = new Scanner(System.in);
-    System.out.println("\n\nMain Menu");
-    System.out.println("Pleas select an option from the menu below: ");
-    System.out.println("================================================");
-    System.out.println("Please select an option from the menu below:");
-    System.out.println("1. View train dispatch information");
-    System.out.println("2. Add a new train departure");
-    System.out.println("3. Assign a track to train departure");
-    System.out.println("4. Add a delay to a train departure");
-    System.out.println("5. Search for a train departure based on train number");
-    System.out.println("6. Search for a train departure based on destination");
-    System.out.println("7. Search for a train departure based on departure time");
-    System.out.println("8. Update station time from user input");
-    System.out.println("9. Exit the application");
-    System.out.println("================================================");
-    System.out.print("Input your choice (1-9) below: ");
+    feedBackMessages.displayMenuContent();
+
     int option;
     try {
       option = Integer.parseInt(scanner.nextLine());
     } catch (NumberFormatException e) {
-      System.out.println("Invalid choice. Please select a valid option.");
+      feedBackMessages.INVALID_CHOICE();
       return displayMenu();
     }
+
     return option;
   }
 
-  /**
-   * Displays train departure details for a specific train departure.
-   *
-   * @param trainDispatch The train departure to display details for.
-   * @since 0.0.5
-   */
-  public void displayTrainDepartureDetails(TrainDispatchSystem trainDispatch) {
-    System.out.println("Train departure details for train "
-        + trainDispatch.getTrainNumber() +  " :");
-    System.out.println("Departure station: " + trainDispatch.getDepartureStation());
-    System.out.println("Departure Time: " + trainDispatch.getDepartureTime());
-    System.out.println("Track: " + trainDispatch.getTrack());
-    System.out.println("Line: " + trainDispatch.getLine());
-  }
 
   /**
    * Processes the user's choice.
@@ -151,90 +102,57 @@ public class TrainDispatchUserInterface {
    * @param choice The user's choice (1-9).
    * @since 0.0.4
    */
+  // kansje bytte til en fornuftig navn
   public void processUserChoice(int choice) {
     while (choice != 9) {
       switch (choice) {
         case 1:
-          // View train dispatch information
-          displayTrainDepartureInformation();
+
+          feedBackMessages.displayTrainDepartureInformation(); // View train dispatch information
           break;
         case 2:
-          // Add a new train departure
-          addNewTrainDeparture();
+
+          addNewTrainDeparture();                  // Add a new train departure
           break;
         case 3:
-          // Assign a track to a train departure
-          assignTrackToTrainDeparture();
+
+          assignTrackToTrainDeparture();           // Assign a track to a train departure
           break;
         case 4:
-          // Add a delay to a train departure
-          addDelayToTrainDeparture();
+
+          addDelayToTrainDeparture();              // Add a delay to a train departure
           break;
         case 5:
-          // Search for a train departure based on train number
-          searchTrainDepartureByTrainNumber();
+
+          searchTrainDepartureByTrainNumber();     // Search for a train departure based on train number
           break;
         case 6:
-          // Search for a train departure based on destination
-          searchTrainDepartureByDestination();
+
+          searchTrainDepartureByDestination();     // Search for a train departure based on destination
           break;
         case 7:
-          // Search for a train departure based on departure time
-          searchTrainDepartureByDepartureTime();
+
+          searchTrainDepartureByDepartureTime();   // Search for a train departure based on departure time
           break;
         case 8:
-          // Update station time from user input
-          updateStationTimeFromUserInput();
+          updateStationTimeFromUserInput();        // Update station time from user input
           break;
         case 9:
           // Exit the application
-          System.out.println("Exiting the application. Goodbye!");
+          feedBackMessages.EXITING_APPLICATION();  // Display a message before exiting
           return;
         default:
-          System.out.println("Invalid choice. Please select a valid option.");
+          feedBackMessages.INVALID_CHOICE();       // Display an error message for invalid choice
           break;
       }
 
-      System.out.println("Do you want to go back to the main menu (press 0), or to exit the application (press 9)?");
+      feedBackMessages.CONTINUE_OR_EXIT();         // Ask the user if they want to continue or exit.
       try {
         choice = Integer.parseInt(scanner.nextLine());
       } catch (NumberFormatException e) {
-        System.out.println("Invalid choice. Please select a valid option.");
+        feedBackMessages.INVALID_CHOICE();        // Display an error message for invalid choice
       }
     }
-  }
-
-  /**
-   * Starts the user interface for displaying train dispatch information in a tabular format.
-   * It prints a table with columns for departure station, destination, departure time,
-   * track, line and train number.
-   *
-   * @since 0.0.4
-   */
-  public void displayTrainDepartureInformation() {
-    // Display the table header
-    System.out.println("----------------------------------------"
-        + "------------------------------------------");
-    System.out.println("| Departure Station | Destination | "
-        + "Departure Time | Track | Line | Train Number |");
-    System.out.println("-----------------------------------"
-        + "-----------------------------------------------");
-
-    // Display information about train trips in a tabular format
-    for (TrainDispatchSystem trainDispatch : trainDispatchList) {
-
-      System.out.printf("| %-17s | %-11s | %-13s  | %-5d | %-4s | %-12s |%n",
-          trainDispatch.getDepartureStation(),
-          trainDispatch.getDestination(),
-          trainDispatch.getDepartureTime(),
-          trainDispatch.getTrack(),
-          trainDispatch.getLine(),
-          trainDispatch.getTrainNumber());
-    }
-
-    // Display the table footer
-    System.out.println("------------------------------------------"
-        + "----------------------------------------");
   }
 
   /**
@@ -245,22 +163,26 @@ public class TrainDispatchUserInterface {
    * @since 0.0.4
    */
   public void addNewTrainDeparture() {
-    System.out.println("Please enter the departure station: ");
+    feedBackMessages.enterDepartureStation();
     String departureStation = scanner.nextLine();
-    System.out.println("Please enter the destination: ");
+
+    feedBackMessages.enterDestination();
     String destination = scanner.nextLine();
-    System.out.println("Please enter the departure time (HH:mm): ");
+
+    feedBackMessages.ENTER_DEPARTURE_TIME();
     String departureTimeStr = scanner.nextLine();
     LocalTime departureTime;
     try {
       departureTime = LocalTime.parse(departureTimeStr);
     } catch (DateTimeParseException e) {
-      System.out.println("Invalid time format. Please use HH:mm format (e.g., 08:30).");
+      feedBackMessages.INVALID_TIME_FORMAT();
       return;
     }
-    System.out.println("Please enter the train line: ");
+
+    feedBackMessages.ENTER_LINE();
     String line = scanner.nextLine();
-    System.out.println("Please enter the track number: ");
+
+    feedBackMessages.ENTER_TRACK();
     int track;
     try {
       track = Integer.parseInt(scanner.nextLine());
@@ -268,14 +190,15 @@ public class TrainDispatchUserInterface {
       System.out.println("Invalid input for track number. Please enter a valid number.");
       return;
     }
-    scanner.nextLine(); // Consume the newline character
-    System.out.println("Please enter the train number: ");
+    scanner.nextLine();
+
+    feedBackMessages.ENTER_TRAIN_NUMBER();
     String trainNumber = scanner.nextLine();
 
     TrainDispatchSystem trainDispatch = new TrainDispatchSystem(departureStation, destination,
         departureTime, line, track);
-    trainDispatch.setTrainNumber(trainNumber);
     trainDispatchList.add(trainDispatch);
+    trainDispatch.setTrainNumber(trainNumber);
     trainManager.markTrainNumberAsAllocated(trainNumber, trainDispatch);
   }
 
@@ -285,16 +208,17 @@ public class TrainDispatchUserInterface {
    * @since 0.0.4
    */
   public void assignTrackToTrainDeparture() {
-    System.out.println("Please enter the train number: ");
+    feedBackMessages.ENTER_TRAIN_NUMBER();
     String trainNumber = scanner.nextLine();
     TrainDispatchSystem trainDispatch =
-        searchTrainDispatchByAttribute("TrainNumber", trainNumber);
+        searchTrainDispatchByAttribute(FeedBackMessages.TRAIN_NUMBER, trainNumber);
 
     if (trainDispatch == null) {
-      System.out.println("Train with the specified train number was not found.");
+      feedBackMessages.TRAIN_WITH_SPECIFIED_TRAIN_NUMBER_NOT_FOUND();
       return;
     }
-    System.out.println("Please enter the track number: ");
+
+    feedBackMessages.ENTER_TRACK();
     int track;
     try {
       track = Integer.parseInt(scanner.nextLine());
@@ -304,7 +228,7 @@ public class TrainDispatchUserInterface {
     }
 
     trainDispatch.setTrack(track);
-    System.out.println("Track assigned successfully.");
+    feedBackMessages.TRACK_ASSIGNED_SUCCESSFULLY();
   }
 
   /**
@@ -313,18 +237,19 @@ public class TrainDispatchUserInterface {
    * @since 0.0.4
    */
   public void addDelayToTrainDeparture() {
-    System.out.println("Please enter the train number: ");
+    feedBackMessages.ENTER_TRAIN_NUMBER();
     String trainNumber = scanner.nextLine();
 
+    // Uses "searchTrainDispatchByAttribute" method to find the train departure.
     TrainDispatchSystem trainDispatch =
-        searchTrainDispatchByAttribute("TrainNumber", trainNumber);
+        searchTrainDispatchByAttribute(FeedBackMessages.TRAIN_NUMBER, trainNumber);
 
     if (trainDispatch == null) {
-      System.out.println("Train with the specified train number was not found.");
+      feedBackMessages.TRAIN_WITH_SPECIFIED_TRAIN_NUMBER_NOT_FOUND();
       return;
     }
 
-    System.out.println("Please enter the delay in minutes: ");
+    feedBackMessages.ENTER_DELAY();
     int delay;
     try {
       delay = Integer.parseInt(scanner.nextLine());
@@ -335,7 +260,8 @@ public class TrainDispatchUserInterface {
 
     trainManager.allocateTrainNumbers(trainNumber, trainDispatch);
     trainDispatch.setDelay(delay);
-    System.out.println("Delay added successfully.");
+
+    feedBackMessages.DELAY_ADDED_SUCCESSFULLY();
   }
 
   /**
@@ -345,13 +271,14 @@ public class TrainDispatchUserInterface {
    * @since 0.0.4
    */
   public void searchTrainDepartureByTrainNumber() {
-    System.out.println("Please enter the train number: ");
+    feedBackMessages.ENTER_TRAIN_NUMBER();
     String trainNumber = scanner.nextLine();
+
     TrainDispatchSystem trainDispatch =
-        searchTrainDispatchByAttribute("TrainNumber", trainNumber);
+        searchTrainDispatchByAttribute(FeedBackMessages.TRAIN_NUMBER, trainNumber);
 
     if (trainDispatch != null) {
-      displayTrainDepartureDetails(trainDispatch);
+      feedBackMessages.displayTrainDepartureDetails(trainDispatch);
     } else {
       System.out.println("Train departure not found.");
     }
@@ -364,13 +291,13 @@ public class TrainDispatchUserInterface {
    * @since 0.0.4
    */
   public void searchTrainDepartureByDestination() {
-    System.out.println("Please enter the destination: ");
+    feedBackMessages.enterDestination();
     String destination = scanner.nextLine();
     TrainDispatchSystem trainDispatch =
         searchTrainDispatchByAttribute("Destination", destination);
 
     if (trainDispatch != null) {
-      displayTrainDepartureDetails(trainDispatch);
+      feedBackMessages.displayTrainDepartureDetails(trainDispatch);
     } else {
       System.out.println("Train departure not found");
     }
@@ -383,14 +310,14 @@ public class TrainDispatchUserInterface {
    * @since 0.0.4
    */
   public void searchTrainDepartureByDepartureTime() {
-    System.out.println("Please enter the departure time (HH:mm): ");
+    feedBackMessages.ENTER_DEPARTURE_TIME();
     String departureTimeStr = scanner.nextLine();
     LocalTime departureTime;
 
     try {
       departureTime = LocalTime.parse(departureTimeStr);
     } catch (DateTimeParseException e) {
-      System.out.println("Invalid time format. Please use HH:mm format (e.g., 08:30).");
+      feedBackMessages.INVALID_TIME_FORMAT();
       return;
     }
 
@@ -399,7 +326,7 @@ public class TrainDispatchUserInterface {
         searchTrainDispatchByAttribute("DepartureTime", departureTimeString);
 
     if (trainDispatch != null) {
-      displayTrainDepartureDetails(trainDispatch);
+      feedBackMessages.displayTrainDepartureDetails(trainDispatch);
     } else {
       System.out.println("Train departure not found");
     }
@@ -412,11 +339,10 @@ public class TrainDispatchUserInterface {
    */
   public void updateStationTimeFromUserInput() {
     // Prompt the user to enter the train number for which they want to update the station time
-    System.out.println("Please enter the train number "
-        + "for which you want to update the station time: ");
+    feedBackMessages.ENTER_TRAIN_NUMBER_TO_UPDATE_STATION_TIME();
     String trainNumber = scanner.nextLine();
     TrainDispatchSystem trainDispatch =
-        searchTrainDispatchByAttribute("TrainNumber", trainNumber);
+        searchTrainDispatchByAttribute(FeedBackMessages.TRAIN_NUMBER, trainNumber);
 
     if (trainDispatch == null) {
       System.out.println("Train with the specified train number was not found.");
@@ -454,21 +380,23 @@ public class TrainDispatchUserInterface {
     TrainDispatchSystem trainDispatch = null;
 
     for (TrainDispatchSystem trainDispatchSystem : trainDispatchList) {
-      if (attribute.equalsIgnoreCase("TrainNumber")
-          && trainDispatchSystem.getTrainNumber().equals(value)) {
-        trainDispatch = trainDispatchSystem;
-        break;
-      } else if (attribute.equalsIgnoreCase("Destination") &&
-          trainDispatchSystem.getDestination().equals(value)) {
-        trainDispatch = trainDispatchSystem;
-        break;
-      } else if (attribute.equalsIgnoreCase("DepartureTime") &&
-          trainDispatchSystem.getDepartureTime().equals(value)) {
+      boolean isMatch = false;
+
+      if (attribute.equalsIgnoreCase("TrainNumber")) {
+        isMatch = trainDispatchSystem.getTrainNumber().equals(value);
+      } else if (attribute.equalsIgnoreCase("Destination")) {
+        isMatch = trainDispatchSystem.getDestination().equals(value);
+      } else if (attribute.equalsIgnoreCase("DepartureTime")) {
+        LocalTime departureTime = LocalTime.parse(value);
+        isMatch = trainDispatchSystem.getDepartureTime().equals(departureTime);
+      }
+
+      if (isMatch) {
         trainDispatch = trainDispatchSystem;
         break;
       }
     }
+
     return trainDispatch;
   }
-
 }
