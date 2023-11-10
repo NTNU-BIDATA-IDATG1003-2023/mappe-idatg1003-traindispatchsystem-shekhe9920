@@ -14,14 +14,14 @@ import java.util.Map;
  * <p>Example:
  *
  * <blockquote><pre>
- *    TrainDispatchSystem trainA = new TrainDispatchSystem("City1", "City2",
- *        LocalTime.of(8, 55), "RE31", 1);
- *    TrainDispatchSystem trainB = new TrainDispatchSystem("City3", "City4",
- *        LocalTime.of(9, 55), "RE30", 2);
+ *    public void setTrainNumber(String trainNumber) {
  *
- *    // Allocate train numbers using TrainManager
- *    TrainManager.markTrainNumberAsAllocated("123", trainA);
- *    TrainManager.markTrainNumberAsAllocated("456", trainB);
+ *      if (trainManager.isTrainNumberAvailable(trainNumber)) {
+ *        trainManager.markTrainNumberAsAllocated(trainNumber, this);
+ *        this.trainNumber = trainNumber;
+ *      }
+ *
+ *    }
  * </pre></blockquote>
  *
  * <p>The primary purpose of this class is to prevent
@@ -29,13 +29,13 @@ import java.util.Map;
  * ensuring each train number is unique within the system.
  *
  * @author Karwan Shekhe
- * @version 0.0.4
- * @since 0.0.1
+ * @version 0.0.5 (Version of this class)
+ * @since 0.0.3 (Introduced in Version 0.0.3 of the Train Dispatch System application)
  */
 public class TrainManager {
+
   // A map to keep track of all allocated train numbers and their associations
   private Map<String, TrainDispatchSystem> allocatedTrainNumbers = new HashMap<>();
-
 
   /**
    * Checks the availability of a train number.
@@ -48,7 +48,7 @@ public class TrainManager {
     return !allocatedTrainNumbers.containsKey(trainNumber);
   }
 
-  /** (CHANGE THIS METHOD WITH allocateTrainNumbers)
+  /**
    * Marks a train number as allocated and associates it with a specific train departure.
    * This method is responsible for marking a train number as allocated to a particular
    * train departure. If the train number is already in use,
@@ -67,28 +67,4 @@ public class TrainManager {
     }
     allocatedTrainNumbers.put(trainNumber, train);
   }
-
-  /** (NEW METHOD)
-   * Allocates a train number to a specific train departure, if valid.
-   * This method checks if both the train number and train departure are not null.
-   * If either is null, it throws an IllegalArgumentException.
-   * Additionally, it checks if the train number is available for allocation.
-   * If available, it associates the train number with the provided train departure.
-   *
-   * @param trainNumber The train number to mark as allocated.
-   * @param train The train departure associate with the allocated train number
-   * @since 0.0.3
-   */
-  public void allocateTrainNumbers(String trainNumber, TrainDispatchSystem train) {
-    if (trainNumber != null && train != null) {
-      if (isTrainNumberAvailable(trainNumber)) {
-        allocatedTrainNumbers.put(trainNumber, train);
-      } else {
-        throw new IllegalArgumentException("Train number is already allocated");
-      }
-    } else {
-      throw new IllegalArgumentException("Invalid train number or train departure data");
-    }
-  }
-
 }

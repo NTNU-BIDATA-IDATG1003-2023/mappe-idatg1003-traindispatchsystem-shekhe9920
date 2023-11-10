@@ -3,6 +3,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 import trainmanager.TrainManager;
 import guiutility.FeedBackMessages;
 
@@ -34,12 +35,12 @@ import guiutility.FeedBackMessages;
  * using this user interface
  *
  * @author Karwan Shekhe
- * @version 0.0.7 (Version of this class.)
- * @since 0.0.3 (This class was introduced in Version 0.0.3 of the Train Dispatch System application)
+ * @version 0.0.8 (Version of this class.)
+ * @since 0.0.3 (Introduced in Version 0.0.3 of the Train Dispatch System application)
  */
 public class TrainDispatchUserInterface {
   final FeedBackMessages feedBackMessages;
-  private HashSet<TrainDispatchSystem> trainDispatchList;
+  private Set<TrainDispatchSystem> trainDispatchList;
   private TrainManager trainManager;
   private final Scanner scanner;
 
@@ -50,7 +51,7 @@ public class TrainDispatchUserInterface {
    * @param trainDispatchList A HashSet of TrainDispatchSystem instances representing train trips.
    * @since 0.0.3
    */
-  public TrainDispatchUserInterface(HashSet<TrainDispatchSystem> trainDispatchList) {
+  public TrainDispatchUserInterface(Set<TrainDispatchSystem> trainDispatchList) {
     this.trainDispatchList = trainDispatchList;
     this.trainManager = new TrainManager();
     this.scanner = new Scanner(System.in);
@@ -196,10 +197,8 @@ public class TrainDispatchUserInterface {
     String trainNumber = scanner.nextLine();
 
     TrainDispatchSystem trainDispatch = new TrainDispatchSystem(departureStation, destination,
-        departureTime, line, track);
+        departureTime, line, track, trainNumber);
     trainDispatchList.add(trainDispatch);
-    trainDispatch.setTrainNumber(trainNumber);
-    trainManager.markTrainNumberAsAllocated(trainNumber, trainDispatch);
   }
 
   /**
@@ -258,9 +257,7 @@ public class TrainDispatchUserInterface {
       return;
     }
 
-    trainManager.allocateTrainNumbers(trainNumber, trainDispatch);
     trainDispatch.setDelay(delay);
-
     feedBackMessages.DELAY_ADDED_SUCCESSFULLY();
   }
 

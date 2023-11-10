@@ -1,7 +1,7 @@
 import edu.ntnu.stud.TrainDispatchSystem;
 import java.time.LocalTime;
-import java.util.HashSet;
-import trainmanager.TrainManager;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * The {@code TrainDispatchInitializer} class is responsible for initializing train trips
@@ -19,13 +19,12 @@ import trainmanager.TrainManager;
  * </pre></blockquote>
  *
  * @author Karwan Shekhe
- * @version 0.0.2
- * @since 0.0.1
+ * @version 0.0.2 (Version of this class)
+ * @since 0.0.5 (Introduced in Version 0.0.5 of the Train Dispatch System application)
  */
 public class TrainDispatchInitializer {
 
-  private static HashSet<TrainDispatchSystem> trainDispatchList = new HashSet<>();
-  private TrainManager trainManager = new TrainManager();
+  public static Set<TrainDispatchSystem> trainDispatchList = new TreeSet<>();
 
   /**
    * Constructs an instance of TrainDispatchInitializer.
@@ -51,41 +50,22 @@ public class TrainDispatchInitializer {
 
     // Create TrainDispatchSystem instances (using the constants) and allocate train numbers
     TrainDispatchSystem trainDispatch0 = new TrainDispatchSystem(departure_station, "Oslo",
-        LocalTime.of(8, 55), "F1", 1);
+        LocalTime.of(8, 55), "F1", 1, "101");
     TrainDispatchSystem trainDispatch1 = new TrainDispatchSystem(departure_station, "Bergen",
-        LocalTime.of(8, 55), "F1", 2);
+        LocalTime.of(8, 55), "F1", 2, "102");
     TrainDispatchSystem trainDispatch2 = new TrainDispatchSystem(departure_station, "Lillehammer",
-        LocalTime.of(8, 55), "F1", 3);
+        LocalTime.of(8, 55), "F1", 3, "103");
     TrainDispatchSystem trainDispatch3 = new TrainDispatchSystem(departure_station, "Tromsø",
-        LocalTime.of(15, 0), "F2", 4);
+        LocalTime.of(15, 0), "F2", 4, "104");
     TrainDispatchSystem trainDispatch4 = new TrainDispatchSystem(departure_station, "Gardermoen",
-        LocalTime.of(13, 15), "F13", 5);
+        LocalTime.of(13, 15), "F13", 5, "105");
 
-    // Create TrainDispatchSystem instances and allocate train numbers.
+    // Creating 'TrainDispatchSystem' instances and adding them to the list.
     trainDispatchList.add(trainDispatch0);
     trainDispatchList.add(trainDispatch1);
     trainDispatchList.add(trainDispatch2);
     trainDispatchList.add(trainDispatch3);
     trainDispatchList.add(trainDispatch4);
-
-
-    // Manually set train numbers
-    //String trainNumber0 = "123456";
-    trainDispatch0.setTrainNumber("101");
-    //String trainNumber1 = "641453";
-    trainDispatch1.setTrainNumber("102");
-    //String trainNumber2 = "765763";
-    trainDispatch2.setTrainNumber("103");
-    //String trainNumber3 = "808797";
-    trainDispatch3.setTrainNumber("104");
-    //String trainNumber4 = "9458745";
-    trainDispatch4.setTrainNumber("105");
-
-    trainManager.markTrainNumberAsAllocated("101", trainDispatch0);
-    trainManager.markTrainNumberAsAllocated("102", trainDispatch1);
-    trainManager.markTrainNumberAsAllocated("103", trainDispatch2);
-    trainManager.markTrainNumberAsAllocated("104", trainDispatch3);
-    trainManager.markTrainNumberAsAllocated("105", trainDispatch4);
 
   }
 
@@ -95,7 +75,7 @@ public class TrainDispatchInitializer {
    * @return A HashSet containing the initialized train dispatch systems.
    * @since 0.0.1
    */
-  public HashSet<TrainDispatchSystem> getTrainDispatchList() {
+  public Set<TrainDispatchSystem> getTrainDispatchList() {
     return trainDispatchList;
   }
 

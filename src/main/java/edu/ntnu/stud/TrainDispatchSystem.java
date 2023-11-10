@@ -1,6 +1,7 @@
 package edu.ntnu.stud;
 
 import java.time.LocalTime;
+import java.util.Objects;
 import trainmanager.TrainManager;
 
 
@@ -20,10 +21,10 @@ import trainmanager.TrainManager;
  * information and adding delays if a train is not on time.
  *
  * @author Karwan Shekhe
- * @version 0.0.5
- * @since 0.0.1
+ * @version 0.0.6 (Version of this class)
+ * @since 0.0.1 (Introduced in Version 0.0.1 of the Train Dispatch System application)
  */
-public class TrainDispatchSystem {
+public class TrainDispatchSystem implements Comparable<TrainDispatchSystem>{
 
   private String departureStation;             // The departure station for the train.
   private String destination;                  // The destination of the train.
@@ -51,12 +52,13 @@ public class TrainDispatchSystem {
    * @since 0.0.1
    */
   public TrainDispatchSystem(String departureStation, String destination,
-      LocalTime departureTime, String line, int track) {
+      LocalTime departureTime, String line, int track, String trainNumber) {
     setDepartureStation(departureStation);
     setDepartureTime(departureTime);
     setDestination(destination);
     setLine(line);
     setTrack(track);
+    setTrainNumber(trainNumber);
   }
 
   /**
@@ -88,20 +90,18 @@ public class TrainDispatchSystem {
   }
 
   /**
-   * Sets the name of the {@code destination} when a valid {@code String} is provided.
+   * Sets the destination for a specific object.
+   * If the provided destination is not null,
+   * it will be assigned to the object's destination property.
+   * If the provided destination is null,
+   * the destination property will be assigned the string "INVALID" instead.
    *
-   * <p>The destination is set to "INVALID" when an invalid value is provided.
-   * The "INVALID" can be used to verify if the {@code TrainDispatchSystem} object is valid to use.
-   *
-   * @param destination The name of the destination.
+   * @param destination The destination to be set.
    * @since 0.0.2
    */
+
   public void setDestination(String destination) {
-    if (destination != null) {
-      this.destination = destination;
-    } else {
-      this.destination = "INVALID";
-    }
+    this.destination = Objects.requireNonNullElse(destination, "INVALID");
   }
 
   /**
@@ -225,4 +225,33 @@ public class TrainDispatchSystem {
     return trainNumber;
   }
 
+  /**
+   * Compares this TrainDispatchSystem object with another TrainDispatchSystem object for ordering.
+   * This method compares TrainDispatchSystem objects based on their departure times.
+   * If the departure times are not the same,
+   * the objects are ordered based on their departure times in ascending order.
+   * If the departure times are the same,
+   * the objects are further compared based on their o numbers to break ties.
+   *
+   * @param o The TrainDispatchSystem object to compare with.
+   * @return a negative integer, zero, or a positive integer as this object is less than, equal to,
+   *         or greater than the specified object, based on departure times and o numbers.
+   * @since 0.0.7
+   */
+  @Override
+  public int compareTo(TrainDispatchSystem o) {
+
+    int timeComparison = this.departureTime.compareTo(o.departureTime);
+
+    if(timeComparison != 0) {
+      return timeComparison;
+    } else {
+      int trainComparison = this.trainNumber.compareTo(o.trainNumber);
+
+      if(trainComparison != 0) {
+        return trainComparison;
+      }
+    }
+    return timeComparison;
+  }
 }

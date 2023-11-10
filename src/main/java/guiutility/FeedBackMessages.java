@@ -4,7 +4,7 @@ import edu.ntnu.stud.TrainDispatchSystem;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The {@code FeedBackMessages} class manages feedback messages and their display to the user.
@@ -13,11 +13,11 @@ import java.util.HashSet;
  *
  * @author Karwan Shekhe
  * @version 0.0.1 (Version of this class)
- * @since 0.0.6 (This class was introduced in Version 0.0.6 of the Train Dispatch System application)
+ * @since 0.0.6 (Introduced in Version 0.0.6 of the Train Dispatch System application)
  */
 public class FeedBackMessages {
 
-  private HashSet<TrainDispatchSystem> trainDispatchList;
+  private Set<TrainDispatchSystem> trainDispatchList;
   public static final String TRAIN_NUMBER = "TrainNumber";
   public static final String SEPARATOR_LINE = "================================================";
   public static final String HORIZONTAL_LINE = "----------------------------------------"
@@ -30,7 +30,7 @@ public class FeedBackMessages {
    *                          display train departure information.
    * @since 0.0.1
    */
-  public FeedBackMessages(HashSet<TrainDispatchSystem> trainDispatchList) {
+  public FeedBackMessages(Set<TrainDispatchSystem> trainDispatchList) {
     this.trainDispatchList = trainDispatchList;
   }
 

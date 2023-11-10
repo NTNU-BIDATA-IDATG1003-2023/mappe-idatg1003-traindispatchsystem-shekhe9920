@@ -1,5 +1,5 @@
 import edu.ntnu.stud.TrainDispatchSystem;
-import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The {@code TrainDispatchApp} class serves as the main entry point for the program,
@@ -23,8 +23,8 @@ import java.util.HashSet;
  * run the {@code main} method.
  *
  * @author Karwan Shekhe
- * @version 0.0.3
- * @since 0.0.1
+ * @version 0.0.3 (Version of this class)
+ * @since 0.0.3 (Introduced in Version 0.0.3 of the Train Dispatch System application)
  */
 public class Main {
 
@@ -40,13 +40,14 @@ public class Main {
     TrainDispatchInitializer initializer = new TrainDispatchInitializer();
     initializer.init();
 
+
     // Get the train dispatch list from the initializer
-    HashSet<TrainDispatchSystem> trainDispatchList = initializer.getTrainDispatchList();
+    Set<TrainDispatchSystem> trainDispatchList = initializer.getTrainDispatchList();
 
     // Create an instance of TrainDispatchUserInterface and pass the list
     TrainDispatchUserInterface ui = new TrainDispatchUserInterface(trainDispatchList);
 
-    // Call the start method
+    // Calls the start method
     ui.start();
   }
 }
