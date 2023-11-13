@@ -3,6 +3,8 @@ package guiutility;
 import edu.ntnu.stud.TrainDispatchSystem;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -14,13 +16,14 @@ import java.util.Set;
  * objects to store and manage train-related information.
  *
  * @author Karwan Shekhe
- * @version 0.0.1 (Version of this class)
+ * @version 0.0.2 (Version of this class)
  * @since 0.0.6 (Introduced in Version 0.0.6 of the Train Dispatch System application)
  */
 public class ConfigurationAppOptions {
   private FeedBackMessages feedBackMessages;
   private Set<TrainDispatchSystem> trainDispatchList;
   private Scanner scanner;
+  private Iterator<TrainDispatchSystem> iterator;
 
   /**
    * Constructs a new {@code ConfigurationAppOptions} instance with the specified feedback messages,
@@ -229,7 +232,7 @@ public class ConfigurationAppOptions {
         searchTrainDispatchByAttribute(FeedBackMessages.TRAIN_NUMBER, trainNumber);
 
     if (trainDispatch == null) {
-      System.out.println("Train with the specified train number was not found.");
+      feedBackMessages.TRAIN_WITH_SPECIFIED_TRAIN_NUMBER_NOT_FOUND();
       return;
     }
 
@@ -246,6 +249,44 @@ public class ConfigurationAppOptions {
     trainDispatch.setDepartureTime(newStationTime);
     System.out.println("Station time updated successfully.");
   }
+
+  /**
+   * Removes a train departure from the system. The user is prompted to enter the train number.
+   * @since 0.0.2 (Version of the FeedBackMessages class where this method was introduced)
+   */
+  public void removeTrainDispatchByTrainNumber() {
+    feedBackMessages.ENTER_TRAIN_NUMBER();
+    String trainNumber = scanner.nextLine();
+    TrainDispatchSystem trainDispatch =
+        searchTrainDispatchByAttribute(FeedBackMessages.TRAIN_NUMBER, trainNumber);
+
+    if (trainDispatch == null) {
+      feedBackMessages.TRAIN_WITH_SPECIFIED_TRAIN_NUMBER_NOT_FOUND();
+      return;
+    }
+    trainDispatchList.remove(trainDispatch);
+    System.out.println("Train departure removed successfully.");
+  }
+
+  /**
+   * Updates the station time for all train departures that have a departure time before
+   * the current time.
+   * @since 0.0.2 (Version of the FeedBackMessages class where this method was introduced)
+   */
+  public void removeTrainDepartureByCurrentTime() {
+    LocalTime currentTime = LocalTime.now();
+
+    while (iterator.hasNext()) {
+      TrainDispatchSystem trainDispatchSystem = iterator.next();
+
+      if (currentTime.isAfter(trainDispatchSystem.getDepartureTime())) {
+        iterator.remove();
+      }
+    }
+
+    System.out.println("Departure list updated successfully.");
+  }
+
 
   /**
    * Searches for a specific train dispatch record within a list of train dispatch system based on

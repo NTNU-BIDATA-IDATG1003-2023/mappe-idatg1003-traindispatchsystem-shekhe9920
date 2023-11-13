@@ -1,11 +1,8 @@
 import edu.ntnu.stud.TrainDispatchSystem;
 import guiutility.ConfigurationAppOptions;
 import guiutility.FeedBackMessages;
-import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.Set;
-import trainmanager.TrainManager;
 
 
 
@@ -65,7 +62,6 @@ import trainmanager.TrainManager;
 public class TrainDispatchUserInterface {
   final FeedBackMessages feedBackMessages;
   private Set<TrainDispatchSystem> trainDispatchList;
-  private TrainManager trainManager;
   private final Scanner scanner;
   private ConfigurationAppOptions configurationAppOptions;
 
@@ -78,7 +74,6 @@ public class TrainDispatchUserInterface {
    */
   public TrainDispatchUserInterface(Set<TrainDispatchSystem> trainDispatchList) {
     this.trainDispatchList = trainDispatchList;
-    this.trainManager = new TrainManager();
     this.scanner = new Scanner(System.in);
     feedBackMessages = new FeedBackMessages(this.trainDispatchList);
     this.configurationAppOptions =
@@ -97,7 +92,7 @@ public class TrainDispatchUserInterface {
     do {
       choice = displayMenu();
       processUserChoice(choice);
-    } while (choice != 9);
+    } while (choice != 11);
     scanner.close();
   }
 
@@ -109,7 +104,6 @@ public class TrainDispatchUserInterface {
    * @since 0.0.4
    */
   public int displayMenu() {
-    //Scanner scanner = new Scanner(System.in);
     feedBackMessages.displayMenuContent();
 
     int option;
@@ -132,62 +126,80 @@ public class TrainDispatchUserInterface {
    */
   // kansje bytte til en fornuftig navn
   public void processUserChoice(int choice) {
-    while (choice != 9) {
+    while (choice != 10) {
       switch (choice) {
-        case 1:
 
+        case 1:
           // View train dispatch information
           feedBackMessages.displayInformationTable();
           break;
-        case 2:
 
+        case 2:
           // Add a new train departure
           configurationAppOptions.addNewTrainDeparture();
           break;
-        case 3:
 
+        case 3:
           // Assign a track to a train departure
           configurationAppOptions.assignTrackToTrainDeparture();
           break;
-        case 4:
 
+        case 4:
           // Add a delay to a train departure
           configurationAppOptions.addDelayToTrainDeparture();
           break;
-        case 5:
 
+        case 5:
           // Search for a train departure based on train number
           configurationAppOptions.searchTrainDepartureByTrainNumber();
           break;
-        case 6:
 
+        case 6:
           // Search for a train departure based on destination
           configurationAppOptions.searchTrainDepartureByDestination();
           break;
-        case 7:
 
+        case 7:
           // Search for a train departure based on departure time
           configurationAppOptions.searchTrainDepartureByDepartureTime();
           break;
-        case 8:
 
+        case 8:
           // Update station time from user input
           configurationAppOptions.updateStationTimeFromUserInput();
           break;
+
         case 9:
+          // Removes a train departure
+         configurationAppOptions.removeTrainDispatchByTrainNumber();
+         break;
+
+        case 10:
+          // Updates departure list based on the users time
+          configurationAppOptions.removeTrainDepartureByCurrentTime();
+          break;
+
+        case 11:
           // Exit the application
           feedBackMessages.EXITING_APPLICATION();  // Displays a message before exiting
           return;
+
         default:
-          feedBackMessages.INVALID_CHOICE();       // Display an error message for invalid choice
+          feedBackMessages.INVALID_CHOICE();      // Displays an error message for invalid choice
           break;
       }
 
-      feedBackMessages.CONTINUE_OR_EXIT();         // Ask the user if they want to continue or exit.
+      feedBackMessages.CONTINUE_OR_EXIT();       // Asks the user if they want to continue or exit.
       try {
         choice = Integer.parseInt(scanner.nextLine());
       } catch (NumberFormatException e) {
-        feedBackMessages.INVALID_CHOICE();        // Display an error message for invalid choice
+        feedBackMessages.INVALID_CHOICE();        // Displays an error message for invalid choice
+      }
+
+      if (choice == 11) {
+        // Exit the application
+        feedBackMessages.EXITING_APPLICATION();  // Displays a message before exiting
+        break; // Exits the loop when the user selects option 9
       }
     }
   }
