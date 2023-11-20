@@ -1,6 +1,6 @@
-package trainmanager;
+package edu.ntnu.stud.register;
 
-import edu.ntnu.stud.TrainDispatchSystem;
+import edu.ntnu.stud.traindispatchsystem.TrainDispatchSystem;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,13 +29,22 @@ import java.util.Map;
  * ensuring each train number is unique within the system.
  *
  * @author Karwan Shekhe
- * @version 0.0.5 (Version of this class)
+ * @version 0.0.7 (Version of this class)
  * @since 0.0.3 (Introduced in Version 0.0.3 of the Train Dispatch System application)
  */
 public class TrainManager {
 
   // A map to keep track of all allocated train numbers and their associations
   private Map<String, TrainDispatchSystem> allocatedTrainNumbers = new HashMap<>();
+
+  /** (NEW)
+   * Constructs an instance of {@code TrainManager}.
+   *
+   * @since 0.0.7
+   */
+  public TrainManager() {
+    allocatedTrainNumbers = new HashMap<>();
+  }
 
   /**
    * Checks the availability of a train number.

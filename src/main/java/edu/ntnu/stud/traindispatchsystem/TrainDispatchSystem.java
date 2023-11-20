@@ -1,8 +1,8 @@
-package edu.ntnu.stud;
+package edu.ntnu.stud.traindispatchsystem;
 
+import edu.ntnu.stud.register.TrainManager;
 import java.time.LocalTime;
 import java.util.Objects;
-import trainmanager.TrainManager;
 
 
 /**
@@ -21,10 +21,10 @@ import trainmanager.TrainManager;
  * information and adding delays if a train is not on time.
  *
  * @author Karwan Shekhe
- * @version 0.0.6 (Version of this class)
+ * @version 0.0.7 (Version of this class)
  * @since 0.0.1 (Introduced in Version 0.0.1 of the Train Dispatch System application)
  */
-public class TrainDispatchSystem implements Comparable<TrainDispatchSystem>{
+public class TrainDispatchSystem {
 
   private String departureStation;             // The departure station for the train.
   private String destination;                  // The destination of the train.
@@ -210,7 +210,7 @@ public class TrainDispatchSystem implements Comparable<TrainDispatchSystem>{
     if (!trainManager.isTrainNumberAvailable(trainNumber)) {
       throw new IllegalStateException("Train number " + trainNumber + " is already allocated");
     } else {
-      trainManager.markTrainNumberAsAllocated(trainNumber, this);
+      //trainManager.markTrainNumberAsAllocated(trainNumber, this);
       this.trainNumber = trainNumber;
     }
   }
@@ -226,32 +226,19 @@ public class TrainDispatchSystem implements Comparable<TrainDispatchSystem>{
   }
 
   /**
-   * Compares this TrainDispatchSystem object with another TrainDispatchSystem object for ordering.
-   * This method compares TrainDispatchSystem objects based on their departure times.
-   * If the departure times are not the same,
-   * the objects are ordered based on their departure times in ascending order.
-   * If the departure times are the same,
-   * the objects are further compared based on their o numbers to break ties.
+   * Provides a string representation of the {@code TrainDispatchSystem} object.
+   * The string representation consists of the departure station, destination, departure time,
+   * line, track, and train number.
    *
-   * @param o The TrainDispatchSystem object to compare with.
-   * @return a negative integer, zero, or a positive integer as this object is less than, equal to,
-   *         or greater than the specified object, based on departure times and o numbers.
+   * @return The string representation of the {@code TrainDispatchSystem} object.
    * @since 0.0.7
    */
-  @Override
-  public int compareTo(TrainDispatchSystem o) {
-
-    int timeComparison = this.departureTime.compareTo(o.departureTime);
-
-    if(timeComparison != 0) {
-      return timeComparison;
-    } else {
-      int trainComparison = this.trainNumber.compareTo(o.trainNumber);
-
-      if(trainComparison != 0) {
-        return trainComparison;
-      }
-    }
-    return timeComparison;
+  public String getDetails() {
+    return departureStation
+        + " " + destination
+        + " " + departureTime
+        + " " + line
+        + " " + track
+        + " " + trainNumber;
   }
 }
