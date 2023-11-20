@@ -1,10 +1,11 @@
-package guiutility;
+package edu.ntnu.stud.userinterface;
 
-import edu.ntnu.stud.TrainDispatchSystem;
+import edu.ntnu.stud.register.TrainRegister;
+import edu.ntnu.stud.traindispatchsystem.TrainDispatchSystem;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Set;
+import java.util.Iterator;
 
 /**
  * The {@code FeedBackMessages} class manages feedback messages and their display to the user.
@@ -15,37 +16,45 @@ import java.util.Set;
  * @version 0.0.1 (Version of this class)
  * @since 0.0.6 (Introduced in Version 0.0.6 of the Train Dispatch System application)
  */
-public class FeedBackMessages {
+public class InformationDisplay {
 
-  private Set<TrainDispatchSystem> trainDispatchList;
-  public static final String TRAIN_NUMBER = "TrainNumber";
-  public static final String SEPARATOR_LINE = "================================================";
-  public static final String HORIZONTAL_LINE = "----------------------------------------"
-      + "------------------------------------------";
+  private Iterator<TrainDispatchSystem> iterator;
+  private StringBuilder stringBuilder;
+  private static final String TRAIN_NUMBER = "TrainNumber";
+  private static final String SEPARATOR_LINE = "================================================\n";
+  private static final String HORIZONTAL_LINE = "----------------------------------------"
+      + "------------------------------------------\n";
 
   /**
    * Constructs an instance of FeedBackMessages with a specified list of train departures.
    *
-   * @param trainDispatchList The list of train departures used to
-   *                          display train departure information.
-   * @since 0.0.1
-   */
-  public FeedBackMessages(Set<TrainDispatchSystem> trainDispatchList) {
-    this.trainDispatchList = trainDispatchList;
-  }
-
-  /**
-   * Displays the current time in the format HH:mm.
-   * Also, displays the current date in the format yyyy-MM-dd.
+   * @param iterator The list of train departures.
    *
    * @since 0.0.1
    */
-  public void displayCurrentTime() {
+  public InformationDisplay(Iterator<TrainDispatchSystem> iterator) {
+    this.iterator = iterator;
+  }
+
+  public void updateIterator(Iterator<TrainDispatchSystem> iterator) {this.iterator = iterator;}
+
+  /**
+   * Displays the current station, time (in the format HH:mm)
+   * and date (in the format yyyy-MM-dd).
+   *
+   * @since 0.0.1
+   */
+  public void displayCurrentStationAndTime() {
+    stringBuilder = new StringBuilder();
+
     LocalTime currentTime = LocalTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
     String formattedTime = currentTime.format(formatter);
     LocalDate currentDate = LocalDate.now();
-    System.out.println("| Gjøvik Station | " + formattedTime + " | " + currentDate + "|");
+
+    stringBuilder.append("| Gjøvik Station | " + formattedTime + " | " + currentDate + "|");
+
+    System.out.println(stringBuilder);
   }
 
   /**
@@ -54,9 +63,13 @@ public class FeedBackMessages {
    * @since 0.0.1
    */
   public void displayWelcomeText() {
-    System.out.println(FeedBackMessages.SEPARATOR_LINE);
-    System.out.println("Welcome to the Train Dispatch System Application");
-    System.out.println(FeedBackMessages.SEPARATOR_LINE);
+    stringBuilder = new StringBuilder();
+
+    stringBuilder.append(SEPARATOR_LINE);
+    stringBuilder.append("Welcome to the Train Dispatch System Application\n");
+    stringBuilder.append(SEPARATOR_LINE);
+
+    System.out.println(stringBuilder);
   }
 
   /**
@@ -65,70 +78,107 @@ public class FeedBackMessages {
    * @since 0.0.1
    */
   public void displayMenuContent() {
-    System.out.println("\n\nMain Menu");
-    System.out.println("Pleas select an option from the menu below: ");
-    System.out.println(SEPARATOR_LINE);
-    System.out.println("Please select an option from the menu below:");
-    System.out.println("1. View train dispatch information");
-    System.out.println("2. Add a new train departure");
-    System.out.println("3. Assign a track to train departure");
-    System.out.println("4. Add a delay to a train departure");
-    System.out.println("5. Search for a train departure based on train number");
-    System.out.println("6. Search for a train departure based on destination");
-    System.out.println("7. Search for a train departure based on departure time");
-    System.out.println("8. Update station time from user input");
-    System.out.println("9. Exit the application");
-    System.out.println(SEPARATOR_LINE);
-    System.out.print("Input your choice (1-9) below: ");
+    stringBuilder = new StringBuilder();
+
+    stringBuilder.append("Main Menu\n");
+    stringBuilder.append("Please select an option from the menu below:\n");
+
+    stringBuilder.append(SEPARATOR_LINE);
+
+    stringBuilder.append("1. View train dispatch information\n");
+    stringBuilder.append("2. Add a new train departure\n");
+    stringBuilder.append("3. Search for a train departure based on train number\n");
+    stringBuilder.append("4. Search for a train departure based on destination\n");
+    stringBuilder.append("5. Search for a train departure based on departure time\n");
+    stringBuilder.append("6. Sort the departure list based on departure time\n");
+    stringBuilder.append("7. Update the train dispatch list based on your current time\n");
+    stringBuilder.append("8. Exit the application\n");
+
+    stringBuilder.append(SEPARATOR_LINE);
+
+    stringBuilder.append("Please input you choice below (1-8): \n");
+
+    System.out.println(stringBuilder);
   }
 
   /**
    * Displays train departure details for a specific train departure.
    *
-   * @param trainDispatch The train departure to display details for.
+   * @param iterator The list of train departures.
    * @since 0.0.1
    */
-  public void displayTrainDepartureDetails(TrainDispatchSystem trainDispatch) {
-    System.out.println("Train departure details for train "
-        + trainDispatch.getTrainNumber() +  " :");
-    System.out.println("Departure station: " + trainDispatch.getDepartureStation());
-    System.out.println("Departure Time: " + trainDispatch.getDepartureTime());
-    System.out.println("Track: " + trainDispatch.getTrack());
-    System.out.println("Line: " + trainDispatch.getLine());
+  public void displayTrainDepartureDetails(Iterator<TrainDispatchSystem> iterator) {
+    while (iterator.hasNext()) {
+      TrainDispatchSystem trainDispatch = iterator.next();
+      stringBuilder = new StringBuilder();
+
+      stringBuilder.append(SEPARATOR_LINE);
+      stringBuilder.append("Train Departure Details for train ").
+          append(trainDispatch.getTrainNumber()).append(" :\n");
+      stringBuilder.append(HORIZONTAL_LINE);
+
+      stringBuilder.append("Train Number: ").append(trainDispatch.getTrainNumber()).append("\n");
+      stringBuilder.append("Departure Station: ").append(trainDispatch.getDepartureStation()).append("\n");
+      stringBuilder.append("Destination: ").append(trainDispatch.getDestination()).append("\n");
+      stringBuilder.append("Departure Time: ").append(trainDispatch.getDepartureTime()).append("\n");
+      stringBuilder.append("Train Line: ").append(trainDispatch.getLine()).append("\n");
+      stringBuilder.append("Track: ").append(trainDispatch.getTrack()).append("\n");
+
+      stringBuilder.append(SEPARATOR_LINE);
+      System.out.println(stringBuilder);
+    }
   }
 
   /**
-   * Starts the user interface for displaying train dispatch information in a tabular format.
+   * Displays a train departures in a table format.
    * It prints a table with columns for departure station, destination, departure time,
    * track, line and train number.
    *
    * @since 0.0.1
    */
-  public void displayTrainDepartureInformation() {
+  public void displayTrainDispatchListTable(Iterator<TrainDispatchSystem> iterator) {
+    stringBuilder = new StringBuilder();
 
-    System.out.println(HORIZONTAL_LINE);  // Displays the table header
-    System.out.println("| Departure Station | Destination | "
-        + "Departure Time | Track | Line | Train Number |");
-    System.out.println(HORIZONTAL_LINE);  // Displays the table header
+    stringBuilder.append(HORIZONTAL_LINE);
+    stringBuilder.append("| Departure Station | Destination | "
+        + "Departure Time | Track | Line | Train Number |\n");
+    stringBuilder.append(HORIZONTAL_LINE);
 
+    if (iterator.hasNext()) {
+      while (iterator.hasNext()) {
+        TrainDispatchSystem trainDispatch = iterator.next();
 
-    // Display information about train trips in a tabular format
-    for (TrainDispatchSystem trainDispatch : trainDispatchList) {
-
-      System.out.printf("| %-17s | %-11s | %-13s  | %-5d | %-4s | %-12s |%n",
-          trainDispatch.getDepartureStation(),
-          trainDispatch.getDestination(),
-          trainDispatch.getDepartureTime(),
-          trainDispatch.getTrack(),
-          trainDispatch.getLine(),
-          trainDispatch.getTrainNumber());
+        stringBuilder.append(String.format("| %-17s | %-11s | %-13s  | %-5d | %-4s | %-12s |%n",
+            trainDispatch.getDepartureStation(),
+            trainDispatch.getDestination(),
+            trainDispatch.getDepartureTime(),
+            trainDispatch.getTrack(),
+            trainDispatch.getLine(),
+            trainDispatch.getTrainNumber()));
+      }
+    } else {
+      stringBuilder.append("| No train dispatches available |\n");
     }
-    // Display the table footer
-    System.out.println(HORIZONTAL_LINE);  // Displays a horizontal line
+    stringBuilder.append(HORIZONTAL_LINE);
+
+    System.out.println(stringBuilder);
   }
 
 
   // Messages for the user:
+
+  /*
+  Kansje lagre alle meldingene i en array og jeg lager en metode som bruker for løkke til å
+  itterere gjennom arrayen og finne en melding med en spesifikk indeks. Der etter implementerer
+  jeg dette i ConfigurationAppOptions classen.
+  Isteden for å skrive masse metoder som gjør det samme og gjør koden vanskelig å lese.
+  Jeg lager 2 arrays en for error meldinger og en for info til brukeren.
+
+  Jeg kan prøve å følge samme prinsipp i oppgave 8.18 og side 279 i boka.
+  (Sjekk også CommandWords classen i "zuul-bad" prosjektet i BlueJ.)
+
+  eventuelt kan jeg lage en ny klasse for dette oppgaven.
+   */
 
   /**
    * Displays a message to prompt the user to enter the departure station.
