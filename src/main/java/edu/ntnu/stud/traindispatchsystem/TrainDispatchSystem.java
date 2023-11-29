@@ -21,7 +21,7 @@ import java.util.Objects;
  * information and adding delays if a train is not on time.
  *
  * @author Karwan Shekhe
- * @version 0.0.7 (Version of this class)
+ * @version 0.0.8 (Version of this class)
  * @since 0.0.1 (Introduced in Version 0.0.1 of the Train Dispatch System application)
  */
 public class TrainDispatchSystem {
@@ -32,6 +32,7 @@ public class TrainDispatchSystem {
   private String line;                         // The train line identifier.
   private int track;                           // The track number.
   private String trainNumber;                  // The allocated train number.
+  private int delay;                           // The delay in minutes.
   private static final TrainManager trainManager = new TrainManager();
 
   /**
@@ -135,6 +136,7 @@ public class TrainDispatchSystem {
     return departureTime;
   }
 
+
   /**
    * Sets a new departure time if there is any delay.
    *
@@ -142,7 +144,17 @@ public class TrainDispatchSystem {
    * @since 0.0.1
    */
   public void setDelay(int delayMinutes) {
-    this.departureTime = departureTime.plusMinutes(delayMinutes);
+    // this.departureTime = departureTime.plusMinutes(delayMinutes);
+    this.delay = delayMinutes;
+  }
+
+  /**
+   * Provides the delay in minutes.
+   *
+   * @since 0.0.8
+   */
+  public int getDelay() {
+    return delay;
   }
 
   /**
