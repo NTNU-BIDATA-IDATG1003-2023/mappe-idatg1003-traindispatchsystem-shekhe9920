@@ -13,7 +13,7 @@ import java.util.Iterator;
  * application.
  *
  * @author Karwan Shekhe
- * @version 0.0.1 (Version of this class)
+ * @version 0.0.2 (Version of this class)
  * @since 0.0.6 (Introduced in Version 0.0.6 of the Train Dispatch System application)
  */
 public class InformationDisplay {
@@ -87,12 +87,12 @@ public class InformationDisplay {
 
     stringBuilder.append("1. View train dispatch information\n");
     stringBuilder.append("2. Add a new train departure\n");
-    stringBuilder.append("3. Search for a train departure based on train number\n");
-    stringBuilder.append("4. Search for a train departure based on destination\n");
-    stringBuilder.append("5. Search for a train departure based on departure time\n");
-    stringBuilder.append("6. Sort the departure list based on departure time\n");
-    stringBuilder.append("7. Update the train dispatch list based on your current time\n");
-    stringBuilder.append("8. Exit the application\n");
+    stringBuilder.append("3. Add delay to a train departure\n");
+    stringBuilder.append("4. Search for a train departure based on train number\n");
+    stringBuilder.append("5. Search for a train departure based on destination\n");
+    stringBuilder.append("6. Search for a train departure based on departure time\n");
+    stringBuilder.append("7. Sort the departure list based on departure time\n");
+    stringBuilder.append("8. Update the train dispatch list based on your current time\n");
 
     stringBuilder.append(SEPARATOR_LINE);
 
@@ -108,22 +108,36 @@ public class InformationDisplay {
    * @since 0.0.1
    */
   public void displayTrainDepartureDetails(Iterator<TrainDispatchSystem> iterator) {
+    boolean found = false;
+
     while (iterator.hasNext()) {
       TrainDispatchSystem trainDispatch = iterator.next();
       stringBuilder = new StringBuilder();
 
+      if(trainDispatch != null) {
+        found = true;
+
+        stringBuilder.append(SEPARATOR_LINE);
+        stringBuilder.append("Train Departure Details for train ").
+            append(trainDispatch.getTrainNumber()).append(" :\n");
+        stringBuilder.append(HORIZONTAL_LINE);
+
+        stringBuilder.append("Train Number: ").append(trainDispatch.getTrainNumber()).append("\n");
+        stringBuilder.append("Departure Station: ").append(trainDispatch.getDepartureStation()).append("\n");
+        stringBuilder.append("Destination: ").append(trainDispatch.getDestination()).append("\n");
+        stringBuilder.append("Departure Time: ").append(trainDispatch.getDepartureTime()).append("\n");
+        stringBuilder.append("Train Line: ").append(trainDispatch.getLine()).append("\n");
+        stringBuilder.append("Track: ").append(trainDispatch.getTrack()).append("\n");
+
+        stringBuilder.append(SEPARATOR_LINE);
+        System.out.println(stringBuilder);
+      }
+
+    }
+    if(!found) {
+      stringBuilder = new StringBuilder();
       stringBuilder.append(SEPARATOR_LINE);
-      stringBuilder.append("Train Departure Details for train ").
-          append(trainDispatch.getTrainNumber()).append(" :\n");
-      stringBuilder.append(HORIZONTAL_LINE);
-
-      stringBuilder.append("Train Number: ").append(trainDispatch.getTrainNumber()).append("\n");
-      stringBuilder.append("Departure Station: ").append(trainDispatch.getDepartureStation()).append("\n");
-      stringBuilder.append("Destination: ").append(trainDispatch.getDestination()).append("\n");
-      stringBuilder.append("Departure Time: ").append(trainDispatch.getDepartureTime()).append("\n");
-      stringBuilder.append("Train Line: ").append(trainDispatch.getLine()).append("\n");
-      stringBuilder.append("Track: ").append(trainDispatch.getTrack()).append("\n");
-
+      stringBuilder.append("Train with the specified train number was not found.").append("\n");
       stringBuilder.append(SEPARATOR_LINE);
       System.out.println(stringBuilder);
     }
@@ -151,7 +165,7 @@ public class InformationDisplay {
         stringBuilder.append(String.format("| %-17s | %-11s | %-13s  | %-5d | %-4s | %-12s |%n",
             trainDispatch.getDepartureStation(),
             trainDispatch.getDestination(),
-            trainDispatch.getDepartureTime(),
+            formatDepartureTimeWithDelay(trainDispatch),
             trainDispatch.getTrack(),
             trainDispatch.getLine(),
             trainDispatch.getTrainNumber()));
@@ -162,6 +176,22 @@ public class InformationDisplay {
     stringBuilder.append(HORIZONTAL_LINE);
 
     System.out.println(stringBuilder);
+  }
+
+  /**
+   * Informs the user that the train is delayed.
+   * It prints a message indicating that the train is delayed and the delay in minutes.
+   *
+   * @param trainDispatch The train departure.
+   * @since 0.0.2
+   */
+  private String formatDepartureTimeWithDelay(TrainDispatchSystem trainDispatch) {
+    if (trainDispatch.getDelay() > 0) {
+      return String.format("%s (%d min delay)",
+          trainDispatch.getDepartureTime(), trainDispatch.getDelay());
+    } else {
+      return trainDispatch.getDepartureTime().toString();
+    }
   }
 
 

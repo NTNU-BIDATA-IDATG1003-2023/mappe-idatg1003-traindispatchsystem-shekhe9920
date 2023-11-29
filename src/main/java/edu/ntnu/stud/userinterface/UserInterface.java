@@ -57,7 +57,7 @@ import java.util.Scanner;
  * </pre></blockquote>
  *
  * @author Karwan Shekhe
- * @version 0.1.0 (Version of this class.)
+ * @version 0.1.1 (Version of this class.)
  * @since 0.0.3 (Introduced in Version 0.0.3 of the Train Dispatch System application)
  */
 public class UserInterface {
@@ -72,7 +72,7 @@ public class UserInterface {
    * the {@code TrainRegister}, {@code Scanner}, {@code ConfigurationUserOptions}
    * and {@code InformationDisplay} objects.
    *
-   * @param
+   * @param trainDispatchList The train dispatch list.
    * @since 0.0.3
    */
   public UserInterface(Iterator<TrainDispatchSystem> trainDispatchList,
@@ -91,15 +91,30 @@ public class UserInterface {
    *
    * @since 0.0.1
    */
+  private boolean exitRequested = false;
   public void start() {
-    display.displayCurrentStationAndTime();
-    display.displayWelcomeText();
-    int choice;
-    do {
-      choice = displayMenu();
-      processUserChoice(choice);
-    } while (choice != 8);
-    scanner.close();
+    try {
+      display.displayCurrentStationAndTime();
+      display.displayWelcomeText();
+
+      while (!exitRequested) {
+        int choice = displayMenu();
+        processUserChoice(choice);
+      }
+    } finally {
+      closeScanner();
+    }
+  }
+
+  /**
+   * Closes the scanner.
+   *
+   * @since 0.1.1
+   */
+  private void closeScanner() {
+    if (scanner != null) {
+      scanner.close();
+    }
   }
 
 
@@ -130,9 +145,9 @@ public class UserInterface {
    * @param choice The user's choice (1-9).
    * @since 0.0.4
    */
-  // kansje bytte til en fornuftig navn
+
   public void processUserChoice(int choice) {
-    while (choice != 8) {
+    while (choice != 9) {
       switch (choice) {
 
         case 1:
@@ -148,59 +163,65 @@ public class UserInterface {
           break;
 
         case 3:
+          // Set delay for a train departure
+          userOptions.setDelayForTrainDeparture();
+          display.updateIterator(trainRegister.getTrainDispatchListIterator());
+          break;
+
+        case 4:
           // Assign a track to a train departure
           userOptions.searchDepartureBasedOnTrainNumber();
           display.updateIterator(trainRegister.getTrainDispatchListIterator());
           break;
 
-        case 4:
+        case 5:
           // Add a delay to a train departure
           userOptions.searchDepartureBasedOnDestination();
           display.updateIterator(trainRegister.getTrainDispatchListIterator());
           break;
 
-        case 5:
+        case 6:
           // Search for a train departure based on train number
           userOptions.searchDepartureBasedOnDepartureTime();
           display.updateIterator(trainRegister.getTrainDispatchListIterator());
           break;
 
-        case 6:
+        case 7:
           // Sort departures based on departure time
           userOptions.sortDepartureListBasedOnDepartureTime();
           display.updateIterator(trainRegister.getTrainDispatchListIterator());
           break;
 
-        case 7:
+        case 8:
 
           userOptions.updateTrainDepartureList();
           display.updateIterator(trainRegister.getTrainDispatchListIterator());
           break;
 
-        case 8:
-          // Exit the application
-          // Displays a message before exiting
-          return;
-
         default:
           // Displays an error message for invalid choice
-          System.out.println("Do you want to go back to the main menu (press 0), "
-              + "or to exit the application (press 9)?");
+          System.out.println("Invalid choice. Please try again.");
           break;
       }
 
+      // Asking the user if they want to continue or exit.
       System.out.println("Do you want to go back to the main menu (press 0), "
-          + "or to exit the application (press 8)?"); // Asks the user if they want to continue or exit.
+          + "or to exit the application (press 9)?");
       try {
         choice = Integer.parseInt(scanner.nextLine());
       } catch (NumberFormatException e) {
-        System.out.println("Invalid choice. Please try again."); // Displays an error message for invalid choice
+        // Displaying an error message for invalid choice
+        System.out.println("Invalid choice. Please try again.");
       }
 
-      if (choice == 8) {
-        // Exit the application
+      if (choice == 9) {
+        // Exits the loop when the user selects option 9
         System.out.println("Exiting the application. Goodbye!"); // Displays a message before exiting
-        break; // Exits the loop when the user selects option 8
+        exitRequested = true;
+        return;
+      } else if (choice == 0) {
+
+        return;
       }
     }
   }

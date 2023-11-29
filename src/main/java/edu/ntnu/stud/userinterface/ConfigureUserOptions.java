@@ -16,7 +16,7 @@ import java.util.Scanner;
  * objects to store and manage train-related information.
  *
  * @author Karwan Shekhe
- * @version 0.0.4 (Version of this class)
+ * @version 0.0.5 (Version of this class)
  * @since 0.0.6 (Introduced in Version 0.0.6 of the Train Dispatch System application)
  */
 public class ConfigureUserOptions {
@@ -95,6 +95,26 @@ public class ConfigureUserOptions {
   }
 
   /**
+   *
+   *
+   * @since 0.0.5
+  */
+  public void setDelayForTrainDeparture() {
+    String trainNumber = handler.inputString("train number");
+    int delay = handler.inputInteger("delay");
+
+    TrainDispatchSystem train =
+        trainRegister.searchByAttributeAndValue("trainNumber", trainNumber).next();
+
+    if (train != null) {
+      train.setDelay(delay);
+      System.out.println("Delay set successfully.");
+    } else {
+      System.out.println("Train not found.");
+    }
+  }
+
+  /**
    * Searches for a train departure based on train number. The user is prompted to enter the
    * train number.
    *
@@ -102,6 +122,7 @@ public class ConfigureUserOptions {
    */
   public void searchDepartureBasedOnTrainNumber() {
     String trainNumber = handler.inputString("train number");
+
     Iterator<TrainDispatchSystem> resultsObtainedIterator =
         trainRegister.searchByAttributeAndValue("trainNumber", trainNumber);
     display.displayTrainDepartureDetails(resultsObtainedIterator);
@@ -117,9 +138,9 @@ public class ConfigureUserOptions {
    */
   public void searchDepartureBasedOnDestination() {
     String destination = handler.inputString("destination");
-    Iterator<TrainDispatchSystem> resultsObtainedIterator =
+     Iterator<TrainDispatchSystem> resultsObtainedIterator =
         trainRegister.searchByAttributeAndValue("destination", destination);
-    display.displayTrainDepartureDetails(resultsObtainedIterator);
+     display.displayTrainDepartureDetails(resultsObtainedIterator);
   }
 
   /**
@@ -142,6 +163,7 @@ public class ConfigureUserOptions {
     Iterator<TrainDispatchSystem> resultsObtainedIterator =
         trainRegister.searchByAttributeAndValue("departureTime", departureTime.toString());
     display.displayTrainDepartureDetails(resultsObtainedIterator);
+
   }
 
   /**
