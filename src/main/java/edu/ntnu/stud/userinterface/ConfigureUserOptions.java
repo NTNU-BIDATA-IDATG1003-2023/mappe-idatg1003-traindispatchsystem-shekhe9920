@@ -1,8 +1,9 @@
 package edu.ntnu.stud.userinterface;
 
+import edu.ntnu.stud.register.TrainManager;
 import edu.ntnu.stud.register.TrainRegister;
 import edu.ntnu.stud.traindispatchsystem.TrainDispatchSystem;
-import edu.ntnu.stud.utility.Handler;
+import edu.ntnu.stud.utility.InputHandler;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.Iterator;
@@ -16,12 +17,13 @@ import java.util.Scanner;
  * objects to store and manage train-related information.
  *
  * @author Karwan Shekhe
- * @version 0.0.5 (Version of this class)
+ * @version 0.0.6 (Version of this class)
  * @since 0.0.6 (Introduced in Version 0.0.6 of the Train Dispatch System application)
  */
 public class ConfigureUserOptions {
   private final Scanner scanner;
-  private final Handler handler;
+  private final TrainManager trainManager;
+  private final InputHandler inputHandler;
   private final InformationDisplay display;
   private final TrainRegister trainRegister;
 
@@ -33,10 +35,12 @@ public class ConfigureUserOptions {
    *
    * @since 0.0.1
    */
-  public ConfigureUserOptions(TrainRegister trainRegister) {
+  public ConfigureUserOptions(TrainRegister trainRegister, TrainManager trainManager) {
+    this.trainManager = trainManager;
+
     this.trainRegister = trainRegister;
     scanner = new Scanner(System.in);
-    this.handler = new Handler();
+    this.inputHandler = new InputHandler();
     trainRegister.initializeDepartureRegister();
     this.display = new InformationDisplay(trainRegister.getTrainDispatchListIterator());
   }
@@ -87,9 +91,11 @@ public class ConfigureUserOptions {
     }
     scanner.nextLine();
 
-    TrainDispatchSystem newTrain = new TrainDispatchSystem(departureStation, destination,
-        departureTime, line, track, trainNumber);
-    trainRegister.addTrainDeparture(newTrain);
+    if (!trainRegister.addTrainDeparture(new TrainDispatchSystem(departureStation, destination,
+        departureTime, line, track, trainNumber))) {
+      System.out.println("Error: Train number is not available or already allocated.");
+      return;
+    }
 
     System.out.println("Train added successfully!");
   }
@@ -100,8 +106,8 @@ public class ConfigureUserOptions {
    * @since 0.0.5
   */
   public void setDelayForTrainDeparture() {
-    String trainNumber = handler.inputString("train number");
-    int delay = handler.inputInteger("delay");
+    String trainNumber = inputHandler.inputString("train number");
+    int delay = inputHandler.inputInteger("delay");
 
     TrainDispatchSystem train =
         trainRegister.searchByAttributeAndValue("trainNumber", trainNumber).next();
@@ -121,7 +127,7 @@ public class ConfigureUserOptions {
    * @since 0.0.4
    */
   public void searchDepartureBasedOnTrainNumber() {
-    String trainNumber = handler.inputString("train number");
+    String trainNumber = inputHandler.inputString("train number");
 
     Iterator<TrainDispatchSystem> resultsObtainedIterator =
         trainRegister.searchByAttributeAndValue("trainNumber", trainNumber);
@@ -137,7 +143,7 @@ public class ConfigureUserOptions {
    * @since 0.0.4
    */
   public void searchDepartureBasedOnDestination() {
-    String destination = handler.inputString("destination");
+    String destination = inputHandler.inputString("destination");
      Iterator<TrainDispatchSystem> resultsObtainedIterator =
         trainRegister.searchByAttributeAndValue("destination", destination);
      display.displayTrainDepartureDetails(resultsObtainedIterator);
@@ -150,7 +156,9 @@ public class ConfigureUserOptions {
    * @since 0.0.4
    */
   public void searchDepartureBasedOnDepartureTime() {
-    String inputTimeStr = handler.inputString("departure time");
+    String inputTimeStr =
+        inputHandler.inputString(
+            "departure time || Please use HH:mm format (e.g., 08:30) ||");
     LocalTime departureTime;
 
     try {

@@ -1,6 +1,5 @@
 package edu.ntnu.stud.userinterface;
 
-import edu.ntnu.stud.register.TrainRegister;
 import edu.ntnu.stud.traindispatchsystem.TrainDispatchSystem;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -13,7 +12,7 @@ import java.util.Iterator;
  * application.
  *
  * @author Karwan Shekhe
- * @version 0.0.2 (Version of this class)
+ * @version 0.0.3 (Version of this class)
  * @since 0.0.6 (Introduced in Version 0.0.6 of the Train Dispatch System application)
  */
 public class InformationDisplay {

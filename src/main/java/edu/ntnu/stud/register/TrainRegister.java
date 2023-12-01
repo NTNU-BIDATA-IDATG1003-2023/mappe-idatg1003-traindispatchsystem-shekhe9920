@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  * </pre></blockquote>
  *
  * @author Karwan Shekhe
- * @version 0.0.6 (Version of this class)
+ * @version 0.0.7 (Version of this class)
  * @since 0.0.5 (Introduced in Version 0.0.5 of the Train Dispatch System application)
  */
 public class TrainRegister {
@@ -78,28 +78,33 @@ public class TrainRegister {
 
     TrainDispatchSystem trainDispatch0 =
         new TrainDispatchSystem(departure_station, "Oslo",
-        LocalTime.of(8, 55), "F1", 1, "101");
+        LocalTime.of(22, 30), "F1", 1, "101");
     trainDispatchRegister.put(trainDispatch0.getTrainNumber() ,trainDispatch0);
+    addTrainDeparture(trainDispatch0);
 
     TrainDispatchSystem trainDispatch1 =
         new TrainDispatchSystem(departure_station, "Bergen",
-        LocalTime.of(8, 55), "F1", 2, "102");
+        LocalTime.of(16, 0), "F1", 2, "102");
     trainDispatchRegister.put(trainDispatch1.getTrainNumber() ,trainDispatch1);
+    addTrainDeparture(trainDispatch1);
 
     TrainDispatchSystem trainDispatch2 =
         new TrainDispatchSystem(departure_station, "Lillehammer",
         LocalTime.of(8, 55), "F1", 3, "103");
     trainDispatchRegister.put(trainDispatch2.getTrainNumber() ,trainDispatch2);
+    addTrainDeparture(trainDispatch2);
 
     TrainDispatchSystem trainDispatch3 =
         new TrainDispatchSystem(departure_station, "Tromsø",
         LocalTime.of(15, 0), "F2", 4, "104");
     trainDispatchRegister.put(trainDispatch3.getTrainNumber() ,trainDispatch3);
+    addTrainDeparture(trainDispatch3);
 
     TrainDispatchSystem trainDispatch4 =
         new TrainDispatchSystem(departure_station, "Gardermoen",
         LocalTime.of(13, 15), "F13", 5, "105");
     trainDispatchRegister.put(trainDispatch4.getTrainNumber() ,trainDispatch4);
+    addTrainDeparture(trainDispatch4);
   }
 
   /**
@@ -115,17 +120,20 @@ public class TrainRegister {
   /**
    * Adds a {@code TrainDispatchSystem} instance to the collection of initialized train trips.
    *
-   * @param trainDispatchSystem The {@code TrainDispatchSystem} instance to be added.
+   * @param trainDispatch The {@code TrainDispatchSystem} instance to be added.
    * @since 0.0.6
    */
-  public void addTrainDeparture(TrainDispatchSystem trainDispatchSystem) {
-    if (trainDispatchSystem != null &&
-        trainManager.isTrainNumberAvailable(trainDispatchSystem.getTrainNumber())) {
+  public boolean addTrainDeparture(TrainDispatchSystem trainDispatch) {
+    if (trainDispatch != null &&
+        trainManager.isTrainNumberAvailable(trainDispatch.getTrainNumber())) {
 
       trainDispatchRegister
-          .put(trainDispatchSystem.getTrainNumber(), trainDispatchSystem);
-      trainManager
-          .markTrainNumberAsAllocated(trainDispatchSystem.getTrainNumber(), trainDispatchSystem);
+          .put(trainDispatch.getTrainNumber(), trainDispatch);
+      trainManager.markTrainNumberAsAllocated(trainDispatch.getTrainNumber(), trainDispatch);
+      addTrainDeparture(trainDispatch);
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -191,24 +199,18 @@ public class TrainRegister {
   /*
   Legge i raporten at jeg brukte GPT til å spørre om jeg kunne gjøre om den gamle
   searchTrainDispatchByAttribute metoden til å bruke Iterator og stream.
+  men jeg gjorde den om til lambda
    */
-  public Iterator<TrainDispatchSystem> searchByAttributeAndValue(String attributeName, String attributeValue) {
+  public Iterator<TrainDispatchSystem> searchByAttributeAndValue(String attributeName,
+      String attributeValue) {
+
     dispatchSearchResults = trainDispatchRegister.values().stream()
-        .filter(trainDispatchSystem -> {
-          switch (attributeName) {
-
-            case "trainNumber":
-              return trainDispatchSystem.getTrainNumber().equals(attributeValue);
-
-            case "destination":
-              return trainDispatchSystem.getDestination().equals(attributeValue);
-
-            case "departureTime":
-              return trainDispatchSystem.getDepartureTime().toString().equals(attributeValue);
-
-            default:
-              return false;
-          }
+        .filter(trainDispatchSystem -> switch (attributeName) {
+          case "trainNumber" -> trainDispatchSystem.getTrainNumber().equals(attributeValue);
+          case "destination" -> trainDispatchSystem.getDestination().equals(attributeValue);
+          case "departureTime" ->
+              trainDispatchSystem.getDepartureTime().toString().equals(attributeValue);
+          default -> false;
         })
         .collect(Collectors.toCollection(ArrayList::new));
 

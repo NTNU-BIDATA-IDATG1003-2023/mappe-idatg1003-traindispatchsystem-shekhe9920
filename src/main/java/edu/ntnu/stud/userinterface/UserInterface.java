@@ -1,5 +1,6 @@
 package edu.ntnu.stud.userinterface;
 
+import edu.ntnu.stud.register.TrainManager;
 import edu.ntnu.stud.register.TrainRegister;
 import edu.ntnu.stud.traindispatchsystem.TrainDispatchSystem;
 import java.util.Iterator;
@@ -57,12 +58,13 @@ import java.util.Scanner;
  * </pre></blockquote>
  *
  * @author Karwan Shekhe
- * @version 0.1.1 (Version of this class.)
+ * @version 0.1.2 (Version of this class.)
  * @since 0.0.3 (Introduced in Version 0.0.3 of the Train Dispatch System application)
  */
 public class UserInterface {
   private InformationDisplay display;
   private TrainRegister trainRegister;
+  private TrainManager trainManager;
   private Scanner scanner;
   private ConfigureUserOptions userOptions;
 
@@ -79,9 +81,10 @@ public class UserInterface {
       TrainRegister trainRegister) {
 
     this.trainRegister = trainRegister;
+    this.trainManager = new TrainManager();
     this.trainRegister.initializeDepartureRegister();
     this.scanner = new Scanner(System.in);
-    this.userOptions = new ConfigureUserOptions(trainRegister);
+    this.userOptions = new ConfigureUserOptions(trainRegister, trainManager);
     this.display = new InformationDisplay(trainDispatchList);
 
   }
