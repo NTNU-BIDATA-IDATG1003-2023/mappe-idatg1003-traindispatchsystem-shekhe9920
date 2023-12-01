@@ -6,4 +6,5 @@ package edu.ntnu.stud.utility;
  */
 public class ErrorFeedback {
 
+  // Commit test
 }
