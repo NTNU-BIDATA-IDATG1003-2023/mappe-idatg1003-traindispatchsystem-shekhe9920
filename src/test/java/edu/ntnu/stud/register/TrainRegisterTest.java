@@ -154,32 +154,5 @@ class TrainRegisterTest {
 
   }
 
-  /*
-  @Test
-  void searchByDepartureStationPositiveTest() {
-    // Arrange
-    setUp();
-    assertNotNull(registerTest, "Train register is not initialized");
-
-    // Act
-    Iterator<TrainDispatchSystem> resultIterator =
-        registerTest.searchByAttributeAndValue("destination", "Gjøvik");
-
-    // Convert the iterator to a list
-    dispatchSearchResultTest = new ArrayList<>();
-    resultIterator.forEachRemaining(dispatchSearchResultTest::add);
-
-    // Assert
-    int expectedTrains = 2;
-    assertEquals(expectedTrains, dispatchSearchResultTest.size(),
-        "Incorrect number of trains found");
-
-    System.out.println("Number of trains found: " + dispatchSearchResultTest.size());
-
-    // Printing the details of each found train for further investigation
-    dispatchSearchResultTest.forEach(train ->
-        System.out.println("Found train: " + train.getTrainNumber() +
-            ", Destination: " + train.getDestination()));
-  }
-   */
+  // Commit test
 }

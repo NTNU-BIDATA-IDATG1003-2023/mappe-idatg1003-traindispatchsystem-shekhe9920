@@ -76,4 +76,5 @@ void markTrainNumberAsAllocatedPositiveTest() {
 
     System.out.println("Train number was not allocated, because it was already allocated");
   }
+  // Commit test
 }
