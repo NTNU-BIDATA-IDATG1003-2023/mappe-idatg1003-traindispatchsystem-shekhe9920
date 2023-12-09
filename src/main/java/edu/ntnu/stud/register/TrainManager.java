@@ -11,17 +11,19 @@ import java.util.Map;
  * It tracks the association between allocated train numbers and
  * the corresponding train departures.
  *
- * <p>Example:
- *
  * <blockquote><pre>
+ * <p><strong>Example Usage:</strong></p>
+ *
+ * {@code
  *    public void setTrainNumber(String trainNumber) {
  *
  *      if (trainManager.isTrainNumberAvailable(trainNumber)) {
  *        trainManager.markTrainNumberAsAllocated(trainNumber, this);
  *        this.trainNumber = trainNumber;
- *      }
  *
- *    }
+ *      }
+ *     }
+ * }
  * </pre></blockquote>
  *
  * <p>The primary purpose of this class is to prevent
@@ -35,9 +37,9 @@ import java.util.Map;
 public class TrainManager {
 
   // A map to keep track of all allocated train numbers and their associations
-  private Map<String, TrainDispatchSystem> allocatedTrainNumbers = new HashMap<>();
+  private final Map<String, TrainDispatchSystem> allocatedTrainNumbers;
 
-  /** (NEW)
+  /**
    * Constructs an instance of {@code TrainManager}.
    *
    * @since 0.0.7
@@ -70,10 +72,14 @@ public class TrainManager {
    * @since 0.0.2
    */
   public void markTrainNumberAsAllocated(String trainNumber, TrainDispatchSystem train) {
-    // Check if the train number is already allocated to another train departure
-    if (!isTrainNumberAvailable(trainNumber)) {
+    // Checking if the train number is already allocated to another train departure
+    if (trainNumber == null ||
+        (!isTrainNumberAvailable(trainNumber) && !allocatedTrainNumbers.containsValue(train))) {
+
       throw new IllegalArgumentException("Train number " + trainNumber + " is already allocated");
+
+    } else {
+      allocatedTrainNumbers.put(trainNumber, train);
     }
-    allocatedTrainNumbers.put(trainNumber, train);
   }
 }

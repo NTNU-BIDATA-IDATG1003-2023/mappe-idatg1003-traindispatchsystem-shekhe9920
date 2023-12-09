@@ -2,26 +2,31 @@ package edu.ntnu.stud.traindispatchsystem;
 
 import edu.ntnu.stud.register.TrainManager;
 import java.time.LocalTime;
-import java.util.Objects;
-
 
 /**
  * The {@code TrainDispatchSystem} class represents a train dispatch system.
  * Each instance of this class represents a specific train departure with details such as
- * departure station, destination, departure time, line, track, and an allocated train number.
+ * departure station, destination, departure time, line, track, an allocated train number
+ * and delay information.
+ * It ensures that the provided data adheres to
+ * specific criteria to maintain consistency within the Train Dispatch System.
  *
- * <p>Example:
- *
+ * <p><strong>Example Usage:</strong></p>
  * <blockquote><pre>
- * TrainDispatchSystem trainDispatch =
- * new TrainDispatchSystem("Gjøvik", "Oslo", LocalTime.of(8, 55), "F1", 4);
+ *{@code
+ * // Creating a TrainDispatchSystem instance with sample data:
+ *
+ * TrainDispatchSystem exampleTrain = new TrainDispatchSystem("Oslo", "Bergen",
+ *     LocalTime.of(14, 30), "F1", 3, "T123");
+ * }
+ *
  * </pre></blockquote>
  *
  * <p>The {@code TrainDispatchSystem} class includes methods for managing train departure
  * information and adding delays if a train is not on time.
  *
  * @author Karwan Shekhe
- * @version 0.0.8 (Version of this class)
+ * @version 0.0.9 (Version of this class)
  * @since 0.0.1 (Introduced in Version 0.0.1 of the Train Dispatch System application)
  */
 public class TrainDispatchSystem {
@@ -36,47 +41,43 @@ public class TrainDispatchSystem {
   private static final TrainManager trainManager = new TrainManager();
 
   /**
-   * Constructor to initialize a {@code TrainDispatchSystem} object.
-   * Constructs a new {@code TrainDispatchSystem} by taking departure station,
-   * destination, departure time, line, track.
+   * Constructs a {@code TrainDispatchSystem} instance with provided details.
    *
-   * <p>The constructor sets invalid values when a given destination, train line, or train number
-   * are not valid or null.
-   * Currently, the train dispatch system only supports one departure station,
-   * and that is Gjøvik.
-   *
-   * @param departureStation The departure station name.
-   * @param destination      The destination station name.
-   * @param departureTime    The departure time.
-   * @param line             The train line name.
-   * @param track            The track number.
+   * @param departureStation The departure station of the train.
+   * @param destination The destination of the train.
+   * @param departureTime The time of departure.
+   * @param line The train line identifier.
+   * @param track The track number.
+   * @param trainNumber The allocated train number.
+   * @throws IllegalArgumentException If any input parameters violate specified criteria.
    * @since 0.0.1
    */
   public TrainDispatchSystem(String departureStation, String destination,
       LocalTime departureTime, String line, int track, String trainNumber) {
+
     setDepartureStation(departureStation);
     setDepartureTime(departureTime);
     setDestination(destination);
     setLine(line);
     setTrack(track);
     setTrainNumber(trainNumber);
+
   }
 
   /**
-   * Sets the name of the {@code departureStation} when a valid {@code String} is provided.
-   * The {@code TrainDispatchSystem} is currently only supporting Gjøvik departure station.
+   * Sets the departure station for the train.
    *
-   * <p>The departure station is set to "INVALID" when an invalid value is provided.
-   * The "INVALID" can be used to verify if the {@code TrainDispatchSystem} object is valid to use.
-   *
-   * @param departureStation The name of the departure Station.
+   * @param departureStation The departure station to be set.
+   * @throws IllegalArgumentException If the departure station is null or
+   *                                  contains non-alphabetic characters.
    * @since 0.0.2
    */
   public void setDepartureStation(String departureStation) {
-    if (departureStation.equals("Gjøvik")) {
+    if (departureStation != null && departureStation.matches("[a-zA-ZæøåÆØÅ]+")) {
       this.departureStation = departureStation;
     } else {
-      this.departureStation = "INVALID";
+      throw new IllegalArgumentException(
+          "Departure Station must contain only alphabets and cannot be null.");
     }
   }
 
@@ -92,17 +93,19 @@ public class TrainDispatchSystem {
 
   /**
    * Sets the destination for a specific object.
-   * If the provided destination is not null,
-   * it will be assigned to the object's destination property.
-   * If the provided destination is null,
-   * the destination property will be assigned the string "INVALID" instead.
    *
    * @param destination The destination to be set.
+   * @throws IllegalArgumentException If the departure station is null or
+   *                                  contains non-alphabetic characters.
    * @since 0.0.2
    */
-
   public void setDestination(String destination) {
-    this.destination = Objects.requireNonNullElse(destination, "INVALID");
+    if (destination != null && destination.matches("[a-zA-ZæøåÆØÅ]+")) {
+      this.destination = destination;
+    } else {
+      throw new IllegalArgumentException(
+          "Destination must contain only alphabets and cannot be null.");
+    }
   }
 
   /**
@@ -120,7 +123,6 @@ public class TrainDispatchSystem {
    *
    * @param departureTime The departure time to set
    * @since 0.0.2
-   *
    */
   public void setDepartureTime(LocalTime departureTime) {
     this.departureTime = departureTime;
@@ -138,19 +140,24 @@ public class TrainDispatchSystem {
 
 
   /**
-   * Sets a new departure time if there is any delay.
+   * Sets a delay in minutes for a specific train departure.
    *
    * @param delayMinutes The delay in minutes to set.
    * @since 0.0.1
    */
   public void setDelay(int delayMinutes) {
-    // this.departureTime = departureTime.plusMinutes(delayMinutes);
-    this.delay = delayMinutes;
+    if (delayMinutes >= 0 && delayMinutes <= 60) {
+      this.delay = delayMinutes;
+    } else {
+      throw new
+          IllegalArgumentException(" The delay should be within the range of 1 to 60 minutes. ");
+    }
   }
 
   /**
-   * Provides the delay in minutes.
+   * Provides the delay in minutes (int).
    *
+   * @return The delay in minutes.
    * @since 0.0.8
    */
   public int getDelay() {
@@ -158,18 +165,22 @@ public class TrainDispatchSystem {
   }
 
   /**
-   * Sets the train line name.
-   * If line is null, it sets a default value.
+   * Sets the train line identifier.
    *
-   * @param line The train line name to set.
+   * @param line The train line identifier to set.
+   * @throws IllegalArgumentException If the line is null.
    * @since 0.0.1
    */
   public void setLine(String line) {
-    this.line = (line != null) ? line : "Default";
+    if (line != null) {
+      this.line = line;
+    } else {
+      throw new IllegalArgumentException("Line cannot be null");
+    }
   }
 
   /**
-   * Gets the train line identifier.
+   * Provides the train line identifier.
    *
    * @return The train line identifier.
    * @since 0.0.1
@@ -180,9 +191,8 @@ public class TrainDispatchSystem {
 
   /**
    * Sets the track number within the range [1, 10].
-   * Throws a IllegalStateException is the track number is less than 1 or more than 10.
    *
-   * @param track                       The number to set
+   * @param track                       The track number to set.
    * @throws IllegalArgumentException   If the track number is outside the valid range.
    * @since 0.0.1
    */
@@ -195,7 +205,7 @@ public class TrainDispatchSystem {
   }
 
   /**
-   * Gets the track number.
+   * Provides the track number.
    *
    * @return The track number.
    * @since 0.0.1
@@ -205,30 +215,27 @@ public class TrainDispatchSystem {
   }
 
   /**
-   * This method allows the assigment of a unique train number to a train departure.
-   * First, the method checks if the train number has already been assigned
-   * to this train departure. If the train number is already set for this departure, no action
-   * is taken and the method returns.
-   * If the train number is already assigned to another train departure in the system,
-   * the method will throw an IllegalStateException
-   * to indicate that the train number is already in use.
+   * Sets the allocated train number for the train.
    *
-   * @param trainNumber The train number to set.
-   * @throws IllegalStateException If the train number is already in use.
+   * @param trainNumber The train number to be set.
+   * @throws IllegalStateException If the train number is already allocated to another instance.
+   * @throws IllegalArgumentException If the train number is null.
    * @since 0.0.1
    */
   public void setTrainNumber(String trainNumber) {
-    // Check if the train number is already assigned to another instance
+    if (trainNumber == null) {
+      throw new IllegalArgumentException("Train number cannot be null");
+    }
+    // Checking if the train number is already assigned to another instance
     if (!trainManager.isTrainNumberAvailable(trainNumber)) {
       throw new IllegalStateException("Train number " + trainNumber + " is already allocated");
     } else {
-      //trainManager.markTrainNumberAsAllocated(trainNumber, this);
       this.trainNumber = trainNumber;
     }
   }
 
   /**
-   * Gets the allocated train number for the train departure.
+   * Gets the allocated train number of the train.
    *
    * @return The allocated train number.
    * @since 0.0.1
@@ -236,22 +243,4 @@ public class TrainDispatchSystem {
   public String getTrainNumber() {
     return trainNumber;
   }
-
-  /**
-   * Provides a string representation of the {@code TrainDispatchSystem} object.
-   * The string representation consists of the departure station, destination, departure time,
-   * line, track, and train number.
-   *
-   * @return The string representation of the {@code TrainDispatchSystem} object.
-   * @since 0.0.7
-   */
-  public String getDetails() {
-    return departureStation
-        + " " + destination
-        + " " + departureTime
-        + " " + line
-        + " " + track
-        + " " + trainNumber;
-  }
-  // Commit test
 }
