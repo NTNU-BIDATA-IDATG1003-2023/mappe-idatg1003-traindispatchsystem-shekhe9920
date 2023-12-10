@@ -29,7 +29,7 @@ package edu.ntnu.stud.utility;
  * text and underlined error messages for better user visibility.
  *
  * @author Karwan Shekhe
- * @version 0.0.7 (Version of this class)
+ * @version 0.1.0 (Version of this class)
  * @since 0.0.7 (Introduced in Version 0.0.7 of the Train Dispatch System application)
  */
 public class UserFeedback {
@@ -39,24 +39,9 @@ public class UserFeedback {
   private static final String ANSI_BLACK = "\u001B[30m";
   private static final String ANSI_RED = "\u001B[31m";
   private static final String ANSI_GREEN = "\u001B[32m";
-  private static final String ANSI_LIGHT_YELLOW = "\u001B[93m";
-  private static final String ANSI_YELLOW = "\u001B[33m";
-  private static final String ANSU_BLUE = "\u001B[34m";
-  private static final String ANSI_PURPLE = "\u001B[35m";
-  private static final String ANSI_CYAN = "\u001B[36m";
-  private static final String ANSI_WHITE = "\u001B[37m";
   private static final String ANSI_BOLD = "\u001B[1m";
-  private static final String ANSI_UNNBOLD = "\u001B[21m";
   private static final String UNDER_DOUBLE_LINE = "\u001B[4m";
-  private final String STOP_UNDER_DOUBLE_LINE = "\u001B[24m";
-  public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
-  public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
-  public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
   public static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
-  public static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
-  public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
-  public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
-  public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
 
 
@@ -66,7 +51,7 @@ public class UserFeedback {
    * @param type The type of prompt message to generate.
    * @return The user prompt message for the specified type.
    */
-  public String feedbackMessage(String type) {
+  private String feedbackMessage(String type) {
     return switch (type) {
       case "enterTrainNumber" -> "Please enter the train number: ";
 
@@ -84,9 +69,15 @@ public class UserFeedback {
 
       case "enterNewStationTime" -> "Enter the new station time (HH:mm)";
 
+      case "removingExpiredDepartures" ->
+          "Removing train departures whose departure time has passed...";
+
+      case "removingAllDepartures" -> "Removing all departures...";
+
       default -> "";
     };
   }
+
 
 
 
@@ -96,7 +87,7 @@ public class UserFeedback {
    * @param type The type of error feedback message to generate.
    * @return The error feedback message for the specified type.
    */
-  public String errorFeedBack(String type) {
+  private String errorFeedBack(String type) {
     return switch (type) {
 
       case "notFound" -> "Train departure was not found. ";
@@ -122,6 +113,7 @@ public class UserFeedback {
   }
 
 
+
   /**
    * Generates a success feedback message based on the specified type.
    *
@@ -135,7 +127,7 @@ public class UserFeedback {
 
       case "trackAssigned" -> "Track assigned successfully";
 
-      case "updatedSuccessfully" -> "Departures updated successfully.";
+      case "updatedSuccessfully" -> "Departure list updated successfully.";
 
       case "sortedSuccessfully" -> "Train departures sorted successfully.";
 
@@ -155,21 +147,26 @@ public class UserFeedback {
    * @param type The type of feedback message to log and display.
    */
   public void logFeedback(String type) {
-    String message = feedbackMessage(type);
-    String warning = errorFeedBack(type);
-    String taskCompleted = taskCompletedFeedBack(type);
+    String message = feedbackMessage(type);                // the feedback message
+    String warning = errorFeedBack(type);                  // the error message
+    String taskCompleted = taskCompletedFeedBack(type);    // the success message
 
+    // Display feedback messages to the user:
     if (!message.isEmpty()) {
-      System.out.println(ANSI_BLACK + ANSI_YELLOW_BACKGROUND + message + ANSI_RESET);
+      System.out.println(ANSI_BOLD + ANSI_BLACK + ANSI_YELLOW_BACKGROUND + message + ANSI_RESET);
     }
 
+    // Display error messages to the user:
     if (!warning.isEmpty()) {
-      System.err.println(ANSI_RED + UNDER_DOUBLE_LINE
-          + warning + STOP_UNDER_DOUBLE_LINE + ANSI_RESET);
+      String stopUnderDoubleLine = "\u001B[24m";
+
+      System.err.println(ANSI_BOLD + ANSI_RED + UNDER_DOUBLE_LINE
+          + warning + stopUnderDoubleLine + ANSI_RESET);
     }
 
+    // Display task completed messages to the user:
     if (!taskCompleted.isEmpty()) {
-      System.out.println(ANSI_GREEN +  taskCompleted + ANSI_RESET);
+      System.out.println(ANSI_BOLD + ANSI_GREEN +  taskCompleted + ANSI_RESET);
     }
   }
 }

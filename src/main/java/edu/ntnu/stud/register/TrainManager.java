@@ -31,13 +31,14 @@ import java.util.Map;
  * ensuring each train number is unique within the system.
  *
  * @author Karwan Shekhe
- * @version 0.0.7 (Version of this class)
+ * @version 0.0.8 (Version of this class)
  * @since 0.0.3 (Introduced in Version 0.0.3 of the Train Dispatch System application)
  */
 public class TrainManager {
 
   // A map to keep track of all allocated train numbers and their associations
   private final Map<String, TrainDispatchSystem> allocatedTrainNumbers;
+
 
   /**
    * Constructs an instance of {@code TrainManager}.
@@ -47,6 +48,8 @@ public class TrainManager {
   public TrainManager() {
     allocatedTrainNumbers = new HashMap<>();
   }
+
+
 
   /**
    * Checks the availability of a train number.
@@ -59,12 +62,15 @@ public class TrainManager {
     return !allocatedTrainNumbers.containsKey(trainNumber);
   }
 
+
+
   /**
    * Marks a train number as allocated and associates it with a specific train departure.
-   * This method is responsible for marking a train number as allocated to a particular
+   *
+   * <p>This method is responsible for marking a train number as allocated to a particular
    * train departure. If the train number is already in use,
    * an IllegalArgumentException is thrown to indicate that the number is already allocated.
-   * Otherwise, the train number is marked as allocated for the provided train departure.
+   * Otherwise, the train number is marked as allocated for the provided train departure.</p>
    *
    * @param trainNumber The train number to mark as allocated.
    * @param train The train departure associate with the allocated train number.
@@ -73,8 +79,8 @@ public class TrainManager {
    */
   public void markTrainNumberAsAllocated(String trainNumber, TrainDispatchSystem train) {
     // Checking if the train number is already allocated to another train departure
-    if (trainNumber == null ||
-        (!isTrainNumberAvailable(trainNumber) && !allocatedTrainNumbers.containsValue(train))) {
+    if (trainNumber == null
+        || (!isTrainNumberAvailable(trainNumber) && !allocatedTrainNumbers.containsValue(train))) {
 
       throw new IllegalArgumentException("Train number " + trainNumber + " is already allocated");
 

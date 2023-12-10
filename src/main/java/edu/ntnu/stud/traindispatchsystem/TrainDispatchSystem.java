@@ -26,7 +26,7 @@ import java.time.LocalTime;
  * information and adding delays if a train is not on time.
  *
  * @author Karwan Shekhe
- * @version 0.0.9 (Version of this class)
+ * @version 0.1.0 (Version of this class)
  * @since 0.0.1 (Introduced in Version 0.0.1 of the Train Dispatch System application)
  */
 public class TrainDispatchSystem {
@@ -39,6 +39,8 @@ public class TrainDispatchSystem {
   private String trainNumber;                  // The allocated train number.
   private int delay;                           // The delay in minutes.
   private static final TrainManager trainManager = new TrainManager();
+
+
 
   /**
    * Constructs a {@code TrainDispatchSystem} instance with provided details.
@@ -64,6 +66,8 @@ public class TrainDispatchSystem {
 
   }
 
+
+
   /**
    * Sets the departure station for the train.
    *
@@ -73,13 +77,17 @@ public class TrainDispatchSystem {
    * @since 0.0.2
    */
   public void setDepartureStation(String departureStation) {
+
     if (departureStation != null && departureStation.matches("[a-zA-ZæøåÆØÅ]+")) {
       this.departureStation = departureStation;
+
     } else {
       throw new IllegalArgumentException(
           "Departure Station must contain only alphabets and cannot be null.");
     }
   }
+
+
 
   /**
    * Provides the departure station.
@@ -91,6 +99,8 @@ public class TrainDispatchSystem {
     return departureStation;
   }
 
+
+
   /**
    * Sets the destination for a specific object.
    *
@@ -100,13 +110,18 @@ public class TrainDispatchSystem {
    * @since 0.0.2
    */
   public void setDestination(String destination) {
+
     if (destination != null && destination.matches("[a-zA-ZæøåÆØÅ]+")) {
       this.destination = destination;
+
     } else {
       throw new IllegalArgumentException(
           "Destination must contain only alphabets and cannot be null.");
     }
   }
+
+
+
 
   /**
    * Provides the destination of the train.
@@ -118,6 +133,9 @@ public class TrainDispatchSystem {
     return destination;
   }
 
+
+
+
   /**
    * Sets the departure time.
    *
@@ -127,6 +145,9 @@ public class TrainDispatchSystem {
   public void setDepartureTime(LocalTime departureTime) {
     this.departureTime = departureTime;
   }
+
+
+
 
   /**
    * Provides the departure time of a train.
@@ -139,20 +160,28 @@ public class TrainDispatchSystem {
   }
 
 
+
+
   /**
    * Sets a delay in minutes for a specific train departure.
    *
    * @param delayMinutes The delay in minutes to set.
+   * @throws IllegalArgumentException If the delay is outside the valid range.
    * @since 0.0.1
    */
   public void setDelay(int delayMinutes) {
+
     if (delayMinutes >= 0 && delayMinutes <= 60) {
       this.delay = delayMinutes;
+
     } else {
       throw new
           IllegalArgumentException(" The delay should be within the range of 1 to 60 minutes. ");
     }
   }
+
+
+
 
   /**
    * Provides the delay in minutes (int).
@@ -164,6 +193,9 @@ public class TrainDispatchSystem {
     return delay;
   }
 
+
+
+
   /**
    * Sets the train line identifier.
    *
@@ -172,12 +204,17 @@ public class TrainDispatchSystem {
    * @since 0.0.1
    */
   public void setLine(String line) {
+
     if (line != null) {
       this.line = line;
+
     } else {
       throw new IllegalArgumentException("Line cannot be null");
     }
   }
+
+
+
 
   /**
    * Provides the train line identifier.
@@ -189,6 +226,9 @@ public class TrainDispatchSystem {
     return line;
   }
 
+
+
+
   /**
    * Sets the track number within the range [1, 10].
    *
@@ -197,12 +237,17 @@ public class TrainDispatchSystem {
    * @since 0.0.1
    */
   public void setTrack(int track) {
+
     if (track >= 1 && track <= 10) {
       this.track = track;
+
     } else {
       throw new IllegalArgumentException("Track must be between 1 and 10 inclusive.");
     }
   }
+
+
+
 
   /**
    * Provides the track number.
@@ -213,6 +258,9 @@ public class TrainDispatchSystem {
   public int getTrack() {
     return track;
   }
+
+
+
 
   /**
    * Sets the allocated train number for the train.
@@ -226,13 +274,17 @@ public class TrainDispatchSystem {
     if (trainNumber == null) {
       throw new IllegalArgumentException("Train number cannot be null");
     }
-    // Checking if the train number is already assigned to another instance
+    // Checking if the train number is already assigned to another instance:
     if (!trainManager.isTrainNumberAvailable(trainNumber)) {
       throw new IllegalStateException("Train number " + trainNumber + " is already allocated");
+
     } else {
       this.trainNumber = trainNumber;
     }
   }
+
+
+
 
   /**
    * Gets the allocated train number of the train.
@@ -243,4 +295,5 @@ public class TrainDispatchSystem {
   public String getTrainNumber() {
     return trainNumber;
   }
+
 }

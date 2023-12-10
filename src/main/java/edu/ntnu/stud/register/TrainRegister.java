@@ -26,19 +26,9 @@ import java.util.stream.Collectors;
  * searching the collection of train trips based on specific attributes.
  * The class utilizes the {@code TrainManager} class to manage the allocation of train numbers.</p>
  *
- * <p>For real-time accuracy, the class ensures that the station time is updated before presenting
- * train dispatch information.
+ * <p>
  * It provides methods for both retrieving and updating the station time,
  * ensuring consistency in the displayed information.</p>
- *
- * <p>Usage:
- *
- * <blockquote><pre>
- * To use this class, create an instance of {@code TrainRegister} and call the
- * {@code initializeDepartureRegister} method to set up train trips.
- * The created {@code TrainDispatchSystem} instances are added to a collection,
- * and train numbers are allocated manually.
- * </pre></blockquote>
  *
  * <blockquote><pre>
  * <p><strong>Example Usage:</strong></p>
@@ -57,7 +47,7 @@ import java.util.stream.Collectors;
  * </pre></blockquote>
  *
  * @author Karwan Shekhe
- * @version 0.0.8 (Version of this class)
+ * @version 0.0.9 (Version of this class)
  * @since 0.0.5 (Introduced in Version 0.0.5 of the Train Dispatch System application)
  */
 public class TrainRegister {
@@ -94,6 +84,8 @@ public class TrainRegister {
 
     trainDispatchRegister = new HashMap<>();
 
+    // Some pre-set departures to populate the list, and to test the functionality:
+
     TrainDispatchSystem trainDispatch0 =
         new TrainDispatchSystem(departure_station, "Oslo",
         LocalTime.of(20, 25), "F1", 1, "101");
@@ -123,7 +115,9 @@ public class TrainRegister {
         LocalTime.of(13, 15), "F13", 5, "105");
     trainDispatchRegister.put(trainDispatch4.getTrainNumber(), trainDispatch4);
     addTrainDeparture(trainDispatch4);
+
   }
+
 
   /**
    * Retrieves an iterator for the collection of initialized TrainDispatchSystem instances.
@@ -135,6 +129,7 @@ public class TrainRegister {
     return trainDispatchRegister.values().iterator();
   }
 
+
   /**
    * Retrieves the current station time.
    *
@@ -145,11 +140,12 @@ public class TrainRegister {
     return stationTime;
   }
 
+
   /**
    * <p>Updates the station time to the specified time, ensuring it matches the "HH:mm" format.
    * Throws an {@code IllegalArgumentException} for an invalid time format.</p>
    *
-   * <p>The station time is set to the current time of the device by default, but this method
+   * <p>The station time is set to the current time of the used device by default, but this method
    * provides the user with the option to update it.</p>
    *
    * @param newStationTime The new station time to be set, in "HH:mm" format.
@@ -164,6 +160,7 @@ public class TrainRegister {
       throw new IllegalArgumentException("Invalid time format. Please enter time in HH:mm format.");
     }
   }
+
 
   /**
    * <p>Adds a {@code TrainDispatchSystem} instance to the collection of initialized train trips.
@@ -205,16 +202,16 @@ public class TrainRegister {
     List<Entry<String, TrainDispatchSystem>> entryList =
         new ArrayList<>(trainDispatchRegister.entrySet());
 
-    // Sort the List based on LocalTime (assuming departure time is stored in TrainDispatchSystem)
+    // Sorts the List based on LocalTime
     entryList.sort(Comparator.comparing(entry -> entry.getValue().getDepartureTime()));
 
-    // Create a new LinkedHashMap to store the sorted entries
+    // Creating a new LinkedHashMap to store the sorted entries
     LinkedHashMap<String, TrainDispatchSystem> sortedMap = new LinkedHashMap<>();
     for (Map.Entry<String, TrainDispatchSystem> entry : entryList) {
       sortedMap.put(entry.getKey(), entry.getValue());
     }
 
-    // Update the trainDispatchRegister with the sorted entries
+    // Updating the trainDispatchRegister with the sorted entries
     trainDispatchRegister = sortedMap;
   }
 
@@ -264,14 +261,59 @@ public class TrainRegister {
 
     dispatchSearchResults = trainDispatchRegister.values().stream()
         .filter(trainDispatchSystem -> switch (attributeName) {
+
           case "trainNumber" -> trainDispatchSystem.getTrainNumber().equals(attributeValue);
+
           case "destination" -> trainDispatchSystem.getDestination().equals(attributeValue);
+
           case "departureTime" ->
               trainDispatchSystem.getDepartureTime().toString().equals(attributeValue);
+
           default -> false;
-        })
-        .collect(Collectors.toCollection(ArrayList::new));
+
+        }).collect(Collectors.toCollection(ArrayList::new));
 
     return dispatchSearchResults.iterator();
+  }
+
+
+  /**
+   * Removes a train departure from the train dispatch system based on the specified train number.
+   * The method iterates through the train dispatch register and removes the first occurrence
+   * that matches the provided train number.
+   *
+   * @param trainNumber The train number of the departure to be removed.
+   * @since 0.0.9
+   */
+  public void removeTrainByTrainNumber(String trainNumber) {
+
+    Iterator<Entry<String, TrainDispatchSystem>> iterator
+                                                = trainDispatchRegister.entrySet().iterator();
+
+    while (iterator.hasNext()) {
+      Entry<String, TrainDispatchSystem> entry = iterator.next();
+      TrainDispatchSystem trainDispatchSystem = entry.getValue();
+
+      Iterator<TrainDispatchSystem> searchResult =
+          searchByAttributeAndValue("trainNumber", trainNumber);
+
+      if (searchResult.hasNext() && searchResult.next().equals(trainDispatchSystem)) {
+        iterator.remove();
+        return;
+
+      }
+    }
+  }
+
+
+  /**
+   * Removes all train departures from the train dispatch system.
+   * This method clears both the train dispatch register and the dispatch search results.
+   *
+   * @since 0.0.9
+   */
+  public void removeAllTrains() {
+    trainDispatchRegister.clear();
+    dispatchSearchResults.clear();
   }
 }

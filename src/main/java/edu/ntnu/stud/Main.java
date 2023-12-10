@@ -8,12 +8,12 @@ import edu.ntnu.stud.userinterface.UserInterfaceManager;
 /**
  * The {@code Main} class serves as the entry point for the
  * <strong>Train Dispatch System Application</strong>.
- * It starts by setting up the train register and launching the user interface manager,
+ * It starts by setting up the train register and launching the {@code UserInterfaceManager},
  * enabling the handling and display of train dispatch information.
  *
  * <p>This class is responsible for directing the application's startup by initializing
  * the {@code TrainRegister} and initiating the {@code UserInterfaceManager}.
- * The main method starts the program, providing users with a user-friendly interface
+ * The main method starts the program, providing users with a interface
  * for interacting with and managing train dispatch data.</p>
  *
  * @author Karwan Shekhe
