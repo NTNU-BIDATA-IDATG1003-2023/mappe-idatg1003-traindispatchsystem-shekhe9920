@@ -1,7 +1,8 @@
-package edu.ntnu.stud.register;
+package edu.ntnu.stud.registertest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import edu.ntnu.stud.register.TrainRegister;
 import edu.ntnu.stud.traindispatchsystem.TrainDispatchSystem;
 import java.time.LocalTime;
 import java.util.ArrayList;

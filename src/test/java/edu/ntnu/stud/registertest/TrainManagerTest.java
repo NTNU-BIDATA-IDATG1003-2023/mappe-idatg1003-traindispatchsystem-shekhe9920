@@ -1,7 +1,9 @@
-package edu.ntnu.stud.register;
+package edu.ntnu.stud.registertest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import edu.ntnu.stud.register.TrainManager;
+import edu.ntnu.stud.register.TrainRegister;
 import edu.ntnu.stud.traindispatchsystem.TrainDispatchSystem;
 import java.time.LocalTime;
 import org.junit.jupiter.api.AfterEach;
@@ -99,12 +101,14 @@ void markTrainNumberAsAllocatedPositiveTest() {
 
     setUp();
 
+    TrainDispatchSystem trainTest = new TrainDispatchSystem("Gjøvik", "Oslo",
+        LocalTime.of(8, 55), "F1", 1, "888");
+
     assertThrows(IllegalArgumentException.class,
-        () -> trainManagerTest.markTrainNumberAsAllocated("ManagerTest1",
-            new TrainDispatchSystem("Gjøvik", "Oslo",
-                LocalTime.of(8, 55), "F1", 1, "804")),
+        () -> trainManagerTest.markTrainNumberAsAllocated("ManagerTest1", trainTest),
         "Expected IllegalArgumentException was not thrown");
 
     System.out.println("Train number was not allocated, because it is already been allocated");
+
   }
 }

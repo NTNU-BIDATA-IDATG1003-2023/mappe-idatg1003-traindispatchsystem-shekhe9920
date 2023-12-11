@@ -20,7 +20,7 @@ import edu.ntnu.stud.userinterface.UserInterfaceManager;
  * @version 0.0.3 (Version of this class)
  * @since 0.0.3 (Introduced in Version 0.0.3 of the Train Dispatch System application)
  */
-public class Main {
+public class TrainDispatchSystemApp {
 
   /**
    * The main entry point of the Train Dispatch System Application.
